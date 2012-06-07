@@ -1,0 +1,32 @@
+- The goals:
+	- To show you how to connect to seemingly incompatible worlds to get the best of them
+	- How we started with a very specific problem and end up with a very general solution
+
+- The story
+	- TigerText offered AC
+	- It took data from Redis
+	- It was implemented in Erlang using ETS tables
+	- Java offered Lucene
+
+- The project
+	- Our mission: To connect both worlds
+	- Our tools: Jinterface
+
+- The steps:
+	- Just OTP on top of Jinterface
+	- The stub autocomplete server
+	- Adding Lucene to the picture
+	- Removing the stub
+
+- The result
+	- A Java Erlang node that processes AC calls
+
+- Can we improve on that?
+	- Indeed
+	- Now we have a very basic Lucene Node, that lets you
+		- Add documents ([{atom(), string()}])
+		- Del documents based on a query
+		- Query documents Lucene-style
+
+- What's next?
+	- Extend!
