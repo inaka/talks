@@ -28,9 +28,9 @@ This is what you should do…
 ```bash
 $ cd /path/to/the_project
 $ git checkout master
-$ git fetch origin --prune
-$ git merge origin/master
-$ git push
+$ git fetch origin --prune  
+$ git merge origin/master  
+$ git push  
 ```
 + Create a branch named <username>.brief.description.of.your.task (you can optionally include the story/issue number).
 ```bash
