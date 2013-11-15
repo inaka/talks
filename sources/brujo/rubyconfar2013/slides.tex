@@ -1,0 +1,279 @@
+\documentclass[utf8,hyperref={colorlinks=true}]{beamer}
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+\mode<presentation>
+\usepackage{listings}
+\usepackage{helvet}
+\usetheme{Warsaw}
+\usecolortheme{whale}
+\usefonttheme[onlylarge]{structuresmallcapsserif}
+\usefonttheme[onlysmall]{structurebold}
+\usepackage{amsthm} % pushQED, popQED
+\newenvironment{aquote}[1]{%
+  \pushQED{#1}%
+  \begin{quote}
+}{%
+  \par\noindent\hfill(\popQED)%
+  \end{quote}%
+}
+
+\setbeamercovered{dynamic}
+\setbeameroption{show notes}
+
+\begin{document}
+\title{Tu primer servidor en Erlang con SSE}
+\subtitle{utilizando Cowboy y Sumo DB}
+\author{Fernando Benavides (\textit{@elbrujohalcon})}
+\institute{Inaka Labs}
+\date{\today}
+\logo{\includegraphics[height=0.5cm]{img/inaka-logo.png}}
+
+\newcommand*\oldmacro{}%
+\let\oldmacro\insertshorttitle%
+\renewcommand*\insertshorttitle{%
+  \oldmacro\hfill%
+  \insertframenumber\,/\,\inserttotalframenumber}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CODE SNIPPETS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{darkblue}{rgb}{0,0.08,0.45} 
+
+\lstset{% general command to set parameter(s)
+		mathescape=true,
+		language=erlang,
+		basicstyle=\ttfamily\small,
+		keywordstyle=\color{blue}\bfseries,
+		identifierstyle=\color{darkblue},
+		stringstyle=\ttfamily,
+		showstringspaces=false}
+
+\defverbatim[colored]\startchild{%
+\begin{lstlisting}[frame=single]
+start_user(User) ->
+  Manager =
+    list_to_atom(
+      "user-manager-" ++
+        integer_to_list($\colorbox{yellow}{\texttt{random:uniform(?MANAGERS)}}$)),
+  supervisor:start_child(Manager, [User]).
+\end{lstlisting}
+}
+\defverbatim[colored]\startchildinit{%
+\begin{lstlisting}[frame=single]
+init([]) ->
+  _ = random:seed(erlang:now()),
+  Managers =
+    [{list_to_atom("user-manager-" ++
+                     integer_to_list(I)),
+      $\colorbox{yellow}{\texttt{\{user\_mgr, start\_link, [I]\}}}$,
+      permanent, brutal_kill, $\colorbox{yellow}{\texttt{supervisor}}$,
+      [user_mgr]}
+     || I <- $\colorbox{yellow}{\texttt{lists:seq(1, ?MANAGERS)}}$],
+  {ok, {{one_for_one, 5, 10}, Managers}}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\backlog{%
+\begin{lstlisting}[frame=single]
+gen_tcp:listen(Port,
+  [binary, {packet, line}, {keepalive, true},
+   {active, false}, {reuseaddr, true},
+   $\colorbox{yellow}{\texttt{\{backlog, 128000\}}}$, {send_timeout, 32000},
+   {send_timeout_close, true}]).
+\end{lstlisting}
+}
+\defverbatim[colored]\backlogweb{%
+\begin{lstlisting}[frame=single]
+mochiweb_http:start(
+  [{name, ?MODULE}, {loop, {?MODULE, loop}},
+   $\colorbox{yellow}{\texttt{\{backlog, 128000\}}}$, {port, Port}]).
+\end{lstlisting}
+}
+\defverbatim[colored]\db{%
+\begin{lstlisting}[frame=single]
+-define(REDIS_CONNECTIONS, 200).
+-record(state, {redis :: $\colorbox{yellow}{\texttt{[pid()]}}$}).
+$\ldots$
+init([]) ->
+  $\ldots$
+  Redis =
+    lists:map(
+      fun(_) ->
+        {ok, Conn} = erldis_client:start_link()
+        Conn
+      end, $\colorbox{yellow}{\texttt{lists:seq(1, ?REDIS\_CONNECTIONS)}}$),
+  {ok, #state{redis = Redis}}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\dbcall{%
+\begin{lstlisting}[frame=single]
+handle_call(Request, From, State) ->
+  $\colorbox{yellow}{\texttt{[RedisConn|Redis] = State\#state.redis}}$,
+  proc_lib:spawn_link(
+    fun() ->
+      Res = handle_call(Request, RedisConn),
+      gen_server:reply(From, Res)
+    end),
+  {noreply, State#state{redis =
+                          $\colorbox{yellow}{\texttt{Redis ++ [RedisConn]}}$}}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\listener{%
+\begin{lstlisting}[frame=single]
+init([]) ->
+  $\ldots$
+  Listeners =
+    [{list_to_atom("client-listener-" ++
+                     integer_to_list(I)),
+      $\colorbox{yellow}{\texttt{\{client\_listener, start\_link, [\textbf{I}]\}}}$,
+      permanent, brutal_kill, worker,
+      [client_listener]}
+     || I <- $\colorbox{yellow}{\texttt{lists:seq(MinPort, MaxPort)}}$],
+  {ok, {{one_for_one, 5, 10}, Listeners}}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\suphandler{%
+\begin{lstlisting}[frame=single]
+EvtMgr =
+  match_stream_match:event_manager(MatchId),
+ok =
+  gen_event:$\colorbox{yellow}{\texttt{add\_handler}}$(EvtMgr,
+    {?MODULE, {MatchId,UserId,Client}}, self()),
+$\colorbox{yellow}{\texttt{MgrRef = erlang:monitor(process, EvtMgr)}}$,
+ClientRef = erlang:monitor(process, Client),
+{reply, ok,
+ State#state{matches =
+  [{Client, MatchId, ClientRef, $\colorbox{yellow}{\texttt{MgrRef}}$}
+   | State#state.matches]}}
+\end{lstlisting}
+}
+\defverbatim[colored]\suphandlerinfo{%
+\begin{lstlisting}[frame=single]
+handle_info({$\colorbox{yellow}{\texttt{'DOWN'}}$,$\colorbox{yellow}{\texttt{Ref}}$,_,Client,_}, State) ->
+  $\ldots$
+  case $\colorbox{yellow}{\texttt{lists:keytake(Ref, 4, State\#state.matches)}}$ of
+    {value, {Client,_,CRef,Ref}, OtherMatches} ->
+      $\ldots$
+\end{lstlisting}
+}
+
+\defverbatim[colored]\repeater{%
+\begin{lstlisting}[frame=single]
+start_link(Name, Source) ->
+  {ok, Pid} = gen_event:start_link(Name),
+  ok = gen_event:add_handler(
+         Source, {?MODULE, Pid}, Pid),
+  {ok, Pid}.
+$\ldots$
+init(Repeater) ->
+  {ok, #state{mgr = Repeater}}.
+$\ldots$
+handle_event(Event, State) ->
+  gen_event:notify(State#state.mgr, Event),
+  {ok, State}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\reply{%
+\begin{lstlisting}[frame=single]
+handle_call(Request, From, State) ->
+  [RedisConn|Redis] = State#state.redis,
+  proc_lib:spawn_link(
+    fun() ->
+      Res = handle_call(Request, RedisConn),
+      $\colorbox{yellow}{\texttt{gen\_server:reply(From, Res)}}$
+    end),
+  {$\colorbox{yellow}{\texttt{noreply}}$, State#state{redis =
+                          Redis ++ [RedisConn]}}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\hibernate{%
+\begin{lstlisting}[frame=single]
+handle_cast(Event, State) ->
+  $\ldots$
+  {noreply, State, $\colorbox{yellow}{\texttt{hibernate}}$}.
+
+$\ldots$
+
+handle_call(Request, _From, State) ->
+  $\ldots$
+  {reply, Reply, State, $\colorbox{yellow}{\texttt{hibernate}}$}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\init{%
+\begin{lstlisting}[frame=single]
+init(UserId) ->
+  {ok, #state{user = UserId}, $\colorbox{yellow}{\texttt{0}}$}.
+  
+$\ldots$
+
+handle_info($\colorbox{yellow}{\texttt{timeout}}$, State) ->
+  case match_stream_db:user(State#state.user) of
+  $\ldots$
+\end{lstlisting}
+}
+
+\defverbatim[colored]\dispatcher{%
+\begin{lstlisting}[frame=single]
+event_manager(MatchId) ->
+  $\colorbox{yellow}{\texttt{binary\_to\_atom(<<"event\_mgr@", MatchId/binary>>, utf8)}}$.
+
+init(MatchId) ->
+  {ok, EventMgr} =
+    gen_event:start_link(
+      $\colorbox{yellow}{\texttt{\{local, event\_manager(MatchId)\}}}$),
+  $\ldots$
+\end{lstlisting}
+}
+
+\defverbatim[colored]\tcpsample{%
+\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
+> telnet <server> <port>    |2011-09-13 13:48:51: goal:
+...                         |  player: Luna (7)
+Welcome to Match Stream.    |  team: <<"tig">>
+...                         |
+V:2:elbrujohalcon           |2011-09-13 13:49:03: penalty:
+2011-09-13 13:48:48: status:|  player: Martinez (6)
+  home: <<"elp">>           |  team: <<"tig">>
+  home_players:             |
+     Albil (25)             |2011-09-13 13:49:04: card:
+     ...                    |  player: Albil (25)
+  home_score: 0             |  card: red
+  visit: <<"tig">>          |  team: <<"elp">>
+  visit_players:            |
+     ..                     |2011-09-13 13:49:05: substitution:
+  visit_score: 0            |  player_out: Fernandez (18)
+  period: first             |  team: <<"elp">>
+                            |  player_in: Silva (21)
+\end{lstlisting}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\frame{\titlepage}
+
+\begin{frame}{Hello World!}
+	\begin{itemize}
+		\item<1> Soy programador desde que ten\'ia 10 a\~nos
+		\item<2> Hago programaci\'on \emph{funcional} desde hace 5 a\~nos, en \emph{Erlang}
+		\item<3> Soy \emph{Director of Engineering} en \textbf{Inaka}
+		\item<4> Me dedico a dise\~nar y, a veces, construir servidores
+		\item<5> \textbf{No soy} un programador \emph{Ruby}
+		\item<6> Qu\'e hago ac\'a? \(o\_O\)
+	\end{itemize}
+\end{frame}
+
+\appendix
+
+\begin{frame}
+	\begin{center}
+		{\Huge Muchas Gracias!}
+	\end{center}
+\end{frame}
+
+\end{document}
