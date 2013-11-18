@@ -2,6 +2,7 @@
 \definecolor{links}{HTML}{2A1B81}
 \hypersetup{colorlinks,linkcolor=,urlcolor=links}
 \mode<presentation>
+\usepackage{multicol}
 \usepackage{listings}
 \usepackage{helvet}
 \usetheme{Warsaw}
@@ -42,214 +43,94 @@
 \lstset{% general command to set parameter(s)
 		mathescape=true,
 		language=erlang,
-		basicstyle=\ttfamily\small,
+		basicstyle=\ttfamily\scriptsize,
 		keywordstyle=\color{blue}\bfseries,
 		identifierstyle=\color{darkblue},
 		stringstyle=\ttfamily,
 		showstringspaces=false}
 
-\defverbatim[colored]\startchild{%
+\defverbatim[colored]\thename{% <-- the name
 \begin{lstlisting}[frame=single]
-start_user(User) ->
-  Manager =
-    list_to_atom(
-      "user-manager-" ++
-        integer_to_list($\colorbox{yellow}{\texttt{random:uniform(?MANAGERS)}}$)),
-  supervisor:start_child(Manager, [User]).
-\end{lstlisting}
-}
-\defverbatim[colored]\startchildinit{%
-\begin{lstlisting}[frame=single]
-init([]) ->
-  _ = random:seed(erlang:now()),
-  Managers =
-    [{list_to_atom("user-manager-" ++
-                     integer_to_list(I)),
-      $\colorbox{yellow}{\texttt{\{user\_mgr, start\_link, [I]\}}}$,
-      permanent, brutal_kill, $\colorbox{yellow}{\texttt{supervisor}}$,
-      [user_mgr]}
-     || I <- $\colorbox{yellow}{\texttt{lists:seq(1, ?MANAGERS)}}$],
-  {ok, {{one_for_one, 5, 10}, Managers}}.
+
+%%TODO: Code
+
 \end{lstlisting}
 }
 
-\defverbatim[colored]\backlog{%
-\begin{lstlisting}[frame=single]
-gen_tcp:listen(Port,
-  [binary, {packet, line}, {keepalive, true},
-   {active, false}, {reuseaddr, true},
-   $\colorbox{yellow}{\texttt{\{backlog, 128000\}}}$, {send_timeout, 32000},
-   {send_timeout_close, true}]).
+\defverbatim[colored]\postsample{%
+\begin{lstlisting}[language=bash]
+curl -vX POST http://localhost:4004/news \
+-H"Content-Type:application/json" \
+-d'{ "source": "RubyConf", 
+     "content": "@elbrujohalcon muestra su sistema para ..." }'
 \end{lstlisting}
 }
-\defverbatim[colored]\backlogweb{%
-\begin{lstlisting}[frame=single]
-mochiweb_http:start(
-  [{name, ?MODULE}, {loop, {?MODULE, loop}},
-   $\colorbox{yellow}{\texttt{\{backlog, 128000\}}}$, {port, Port}]).
-\end{lstlisting}
-}
-\defverbatim[colored]\db{%
-\begin{lstlisting}[frame=single]
--define(REDIS_CONNECTIONS, 200).
--record(state, {redis :: $\colorbox{yellow}{\texttt{[pid()]}}$}).
-$\ldots$
-init([]) ->
-  $\ldots$
-  Redis =
-    lists:map(
-      fun(_) ->
-        {ok, Conn} = erldis_client:start_link()
-        Conn
-      end, $\colorbox{yellow}{\texttt{lists:seq(1, ?REDIS\_CONNECTIONS)}}$),
-  {ok, #state{redis = Redis}}.
+\defverbatim[colored]\postsampleresp{%
+\begin{lstlisting}[language=bash]
+> POST /news HTTP/1.1
+> User-Agent: curl/7.30.0
+> Host: localhost:4004
+> Accept: */*
+> Content-Type:application/json
+> Content-Length: 50
+>
+< HTTP/1.1 204 No Content
+< connection: keep-alive
+< server: Cowboy
+< date: Fri, 08 Nov 2013 20:06:01 GMT
+< content-length: 0
+<
 \end{lstlisting}
 }
 
-\defverbatim[colored]\dbcall{%
-\begin{lstlisting}[frame=single]
-handle_call(Request, From, State) ->
-  $\colorbox{yellow}{\texttt{[RedisConn|Redis] = State\#state.redis}}$,
-  proc_lib:spawn_link(
-    fun() ->
-      Res = handle_call(Request, RedisConn),
-      gen_server:reply(From, Res)
-    end),
-  {noreply, State#state{redis =
-                          $\colorbox{yellow}{\texttt{Redis ++ [RedisConn]}}$}}.
+\defverbatim[colored]\getsample{%
+\begin{lstlisting}[language=bash]
+
 \end{lstlisting}
 }
 
-\defverbatim[colored]\listener{%
-\begin{lstlisting}[frame=single]
-init([]) ->
-  $\ldots$
-  Listeners =
-    [{list_to_atom("client-listener-" ++
-                     integer_to_list(I)),
-      $\colorbox{yellow}{\texttt{\{client\_listener, start\_link, [\textbf{I}]\}}}$,
-      permanent, brutal_kill, worker,
-      [client_listener]}
-     || I <- $\colorbox{yellow}{\texttt{lists:seq(MinPort, MaxPort)}}$],
-  {ok, {{one_for_one, 5, 10}, Listeners}}.
+\defverbatim[colored]\getsample{%
+\begin{lstlisting}[language=bash]
+curl -vX GET http://localhost:4004/news
+\end{lstlisting}
+}
+\defverbatim[colored]\getsampleresph{%
+\begin{lstlisting}[language=bash]
+> GET /news HTTP/1.1
+> User-Agent: curl/7.30.0
+> Host: localhost:4004
+> Accept: */*
+>
+\end{lstlisting}
+}
+\defverbatim[colored]\getsampleresphh{%
+\begin{lstlisting}[language=bash]
+< HTTP/1.1 200 OK
+< transfer-encoding: chunked
+< connection: keep-alive
+< server: Cowboy
+< date: Thu, 07 Nov 2013 14:31:10 GMT
+< content-type: text/event-stream
+<
+event: RubyConf
+data: La charla de @elbrujohalcon esta por comenzar
+
 \end{lstlisting}
 }
 
-\defverbatim[colored]\suphandler{%
-\begin{lstlisting}[frame=single]
-EvtMgr =
-  match_stream_match:event_manager(MatchId),
-ok =
-  gen_event:$\colorbox{yellow}{\texttt{add\_handler}}$(EvtMgr,
-    {?MODULE, {MatchId,UserId,Client}}, self()),
-$\colorbox{yellow}{\texttt{MgrRef = erlang:monitor(process, EvtMgr)}}$,
-ClientRef = erlang:monitor(process, Client),
-{reply, ok,
- State#state{matches =
-  [{Client, MatchId, ClientRef, $\colorbox{yellow}{\texttt{MgrRef}}$}
-   | State#state.matches]}}
-\end{lstlisting}
-}
-\defverbatim[colored]\suphandlerinfo{%
-\begin{lstlisting}[frame=single]
-handle_info({$\colorbox{yellow}{\texttt{'DOWN'}}$,$\colorbox{yellow}{\texttt{Ref}}$,_,Client,_}, State) ->
-  $\ldots$
-  case $\colorbox{yellow}{\texttt{lists:keytake(Ref, 4, State\#state.matches)}}$ of
-    {value, {Client,_,CRef,Ref}, OtherMatches} ->
-      $\ldots$
+\defverbatim[colored]\getsamplerespa{%
+\begin{lstlisting}[language=bash]
+event: RubyConf
+data: @elbrujohalcon muestra su sistema para ...
+
 \end{lstlisting}
 }
 
-\defverbatim[colored]\repeater{%
-\begin{lstlisting}[frame=single]
-start_link(Name, Source) ->
-  {ok, Pid} = gen_event:start_link(Name),
-  ok = gen_event:add_handler(
-         Source, {?MODULE, Pid}, Pid),
-  {ok, Pid}.
-$\ldots$
-init(Repeater) ->
-  {ok, #state{mgr = Repeater}}.
-$\ldots$
-handle_event(Event, State) ->
-  gen_event:notify(State#state.mgr, Event),
-  {ok, State}.
-\end{lstlisting}
-}
+\defverbatim[colored]\getsamplerespb{%
+\begin{lstlisting}[language=bash]
+event: RubyConf 
+data: el publico observa esta diapositiva :P
 
-\defverbatim[colored]\reply{%
-\begin{lstlisting}[frame=single]
-handle_call(Request, From, State) ->
-  [RedisConn|Redis] = State#state.redis,
-  proc_lib:spawn_link(
-    fun() ->
-      Res = handle_call(Request, RedisConn),
-      $\colorbox{yellow}{\texttt{gen\_server:reply(From, Res)}}$
-    end),
-  {$\colorbox{yellow}{\texttt{noreply}}$, State#state{redis =
-                          Redis ++ [RedisConn]}}.
-\end{lstlisting}
-}
-
-\defverbatim[colored]\hibernate{%
-\begin{lstlisting}[frame=single]
-handle_cast(Event, State) ->
-  $\ldots$
-  {noreply, State, $\colorbox{yellow}{\texttt{hibernate}}$}.
-
-$\ldots$
-
-handle_call(Request, _From, State) ->
-  $\ldots$
-  {reply, Reply, State, $\colorbox{yellow}{\texttt{hibernate}}$}.
-\end{lstlisting}
-}
-
-\defverbatim[colored]\init{%
-\begin{lstlisting}[frame=single]
-init(UserId) ->
-  {ok, #state{user = UserId}, $\colorbox{yellow}{\texttt{0}}$}.
-  
-$\ldots$
-
-handle_info($\colorbox{yellow}{\texttt{timeout}}$, State) ->
-  case match_stream_db:user(State#state.user) of
-  $\ldots$
-\end{lstlisting}
-}
-
-\defverbatim[colored]\dispatcher{%
-\begin{lstlisting}[frame=single]
-event_manager(MatchId) ->
-  $\colorbox{yellow}{\texttt{binary\_to\_atom(<<"event\_mgr@", MatchId/binary>>, utf8)}}$.
-
-init(MatchId) ->
-  {ok, EventMgr} =
-    gen_event:start_link(
-      $\colorbox{yellow}{\texttt{\{local, event\_manager(MatchId)\}}}$),
-  $\ldots$
-\end{lstlisting}
-}
-
-\defverbatim[colored]\tcpsample{%
-\begin{lstlisting}[language=bash,basicstyle=\ttfamily\scriptsize]
-> telnet <server> <port>    |2011-09-13 13:48:51: goal:
-...                         |  player: Luna (7)
-Welcome to Match Stream.    |  team: <<"tig">>
-...                         |
-V:2:elbrujohalcon           |2011-09-13 13:49:03: penalty:
-2011-09-13 13:48:48: status:|  player: Martinez (6)
-  home: <<"elp">>           |  team: <<"tig">>
-  home_players:             |
-     Albil (25)             |2011-09-13 13:49:04: card:
-     ...                    |  player: Albil (25)
-  home_score: 0             |  card: red
-  visit: <<"tig">>          |  team: <<"elp">>
-  visit_players:            |
-     ..                     |2011-09-13 13:49:05: substitution:
-  visit_score: 0            |  player_out: Fernandez (18)
-  period: first             |  team: <<"elp">>
-                            |  player_in: Silva (21)
 \end{lstlisting}
 }
 
@@ -266,6 +147,88 @@ V:2:elbrujohalcon           |2011-09-13 13:49:03: penalty:
 		\item<5> \textbf{No soy} un programador \emph{Ruby}
 		\item<6> Qu\'e hago ac\'a? \(o\_O\)
 	\end{itemize}
+\end{frame}
+
+\section{Introducci\'on}
+\subsection{Descripci\'on}
+\begin{frame}{Resumen}
+
+\begin{description}
+	\item[Escenario]
+		\begin{itemize}
+			\item Servidor con API tipo REST
+			\item Clientes necesitan actualizaciones en \emph{Real-Time}
+		\end{itemize}
+	\ \\
+	\pause
+	\item[Soluci\'on]
+		\begin{itemize}
+			\item Se puede resolver con \emph{Ruby}? \textbf{S\'i}
+			\item Existen otras soluciones? \textbf{S\'i}
+		\end{itemize}
+	\ \\
+	\pause
+	\item[Erlang]
+		\begin{itemize}
+			\item Es un paradigma distinto, requiere aprendizaje
+			\item Es \textbf{ideal} para este tipo de escenarios
+		\end{itemize}
+\end{description}
+
+\end{frame}
+
+\subsection{Alcance}
+\begin{frame}{Contenidos}
+\begin{multicols}{2}
+	\alert{En esta charla}
+		\begin{itemize} \itemsep1em
+			\item<+-> SSE
+			\item<+-> Erlang / OTP \emph{b\'asico}
+			\item<+-> Sumo DB \emph{b\'asico}
+			\item<+-> Cowboy \emph{b\'asico}
+		\end{itemize}
+\columnbreak
+	\alert{Fuera de esta charla}
+		\begin{itemize} \itemsep1em
+			\item<+-> REST \emph{avanzado}
+			\item<+-> Erlang / OTP \emph{avanzado}
+			\item<+-> Sumo DB \emph{avanzado}
+			\item<+-> Elixir
+		\end{itemize}
+\end{multicols}
+\end{frame}
+
+\subsection{Canillita}
+\begin{frame}{La Aplicaci\'on}
+\begin{multicols}{2}
+\includegraphics[height=.8\textheight]{img/paperboy.jpg} \\
+\columnbreak
+	\alert{\textit{{\huge Canillita}}}
+	\ \\
+	\ \\
+	Simple API con dos endpoints:
+	\ \\
+	\ \\
+		\begin{description}
+			\item[POST /news]\ \\ para publicar noticias
+			\item[GET /news]\ \\ para recibir noticias
+		\end{description}
+\end{multicols}
+\end{frame}
+
+\begin{frame}{Ejemplos}
+\alert{\texttt{POST /news}}
+\postsample
+\visible<2>\postsampleresp
+\end{frame}
+
+\begin{frame}{Ejemplos}
+\alert{\texttt{GET /news}}
+\only<1,2>\getsample
+\only<1,2,3>{\visible<2,3>\getsampleresph}
+\visible<2,3,4>\getsampleresphh
+\visible<3,4>\getsamplerespa
+\visible<4>\getsamplerespb
 \end{frame}
 
 \appendix
