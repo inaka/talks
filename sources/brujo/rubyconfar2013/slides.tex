@@ -268,7 +268,7 @@ handle_get(Req) ->
 
   lists:foreach(
     fun(NewsFlash) ->
-      send_flash(NewsFlash, Req1)
+      send_flash(<<"old_news_flash">>, NewsFlash, Req1)
     end, LatestNews),
 
   pg2:join(canillita_listeners, self()),
@@ -288,7 +288,7 @@ handle_get(Req) ->
 
   lists:foreach(
     fun(NewsFlash) ->
-      send_flash(NewsFlash, Req1)
+      send_flash(<<"old_news_flash">>, NewsFlash, Req1)
     end, LatestNews),
 
   pg2:join(canillita_listeners, self()),
@@ -308,7 +308,7 @@ handle_get(Req) ->
 
   lists:foreach(
     fun(NewsFlash) ->
-      send_flash(NewsFlash, Req1)
+      send_flash(<<"old_news_flash">>, NewsFlash, Req1)
     end, LatestNews),
 
   pg2:join(canillita_listeners, self()),
@@ -328,7 +328,7 @@ handle_get(Req) ->
 
 @  lists:foreach(@
 @    fun(NewsFlash) ->@
-@      send_flash(NewsFlash, Req1)@
+@      send_flash(<<"old_news_flash">>, NewsFlash, Req1)@
 @    end, LatestNews),@
 
   pg2:join(canillita_listeners, self()),
@@ -348,7 +348,7 @@ handle_get(Req) ->
 
   lists:foreach(
     fun(NewsFlash) ->
-      send_flash(NewsFlash, Req1)
+      send_flash(<<"old_news_flash">>, NewsFlash, Req1)
     end, LatestNews),
 
 @  pg2:join(canillita_listeners, self()),@
@@ -368,7 +368,7 @@ handle_get(Req) ->
 
   lists:foreach(
     fun(NewsFlash) ->
-      send_flash(NewsFlash, Req1)
+      send_flash(<<"old_news_flash">>, NewsFlash, Req1)
     end, LatestNews),
 
   pg2:join(canillita_listeners, self()),
@@ -380,99 +380,264 @@ handle_get(Req) ->
 \defverbatim[colored]\infosend{%
 \begin{lstlisting}[frame=single]
 info({news_flash, NewsFlash}, Req, State) ->
-  send_flash(NewsFlash, Req),
+  send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
 send_flash(NewsFlash, Req) ->
   Event = canillita_news:get_title(NewsFlash),
-  Data  = canillita_news:get_content(NewsFlash),
-  Chunk =
-  	<<"event: ", Event/binary, "\n",
-  	  "data: ", Data/binary, "\n\n">>,
+  Content = canillita_news:get_content(NewsFlash),
+  Chunk = <<"event: ", Event/binary,   "\n",
+            "data: ",  Title/binary,   "\n",
+            "data: ",  Content/binary, "\n\n">>,
   cowboy_req:chunk(Chunk, Req).
+
+notify(NewsFlash) ->
+  lists:foreach(fun(Listener) ->
+      Listener ! {news_flash, NewsFlash}
+    end, pg2:get_members(canillita_listeners)).
 \end{lstlisting}
 }
 
 \defverbatim[colored]\infosenda{%
 \begin{lstlisting}[frame=single]
 info({news_flash, NewsFlash}, Req, State) ->
-  @send_flash(NewsFlash, Req),@
+  @send_flash(<<"news_flash">>, NewsFlash, Req),@
   {loop, Req, State}.
 
 send_flash(NewsFlash, Req) ->
   Event = canillita_news:get_title(NewsFlash),
-  Data  = canillita_news:get_content(NewsFlash),
-  Chunk =
-  	<<"event: ", Event/binary, "\n",
-  	  "data: ", Data/binary, "\n\n">>,
+  Content = canillita_news:get_content(NewsFlash),
+  Chunk = <<"event: ", Event/binary,   "\n",
+            "data: ",  Title/binary,   "\n",
+            "data: ",  Content/binary, "\n\n">>,
   cowboy_req:chunk(Chunk, Req).
+
+notify(NewsFlash) ->
+  lists:foreach(fun(Listener) ->
+      Listener ! {news_flash, NewsFlash}
+    end, pg2:get_members(canillita_listeners)).
 \end{lstlisting}
 }
 
 \defverbatim[colored]\infosendb{%
 \begin{lstlisting}[frame=single]
 info({news_flash, NewsFlash}, Req, State) ->
-  send_flash(NewsFlash, Req),
+  send_flash(<<"news_flash">>, NewsFlash, Req),
   @{loop, Req, State}.@
 
 send_flash(NewsFlash, Req) ->
   Event = canillita_news:get_title(NewsFlash),
-  Data  = canillita_news:get_content(NewsFlash),
-  Chunk =
-  	<<"event: ", Event/binary, "\n",
-  	  "data: ", Data/binary, "\n\n">>,
+  Content = canillita_news:get_content(NewsFlash),
+  Chunk = <<"event: ", Event/binary,   "\n",
+            "data: ",  Title/binary,   "\n",
+            "data: ",  Content/binary, "\n\n">>,
   cowboy_req:chunk(Chunk, Req).
+
+notify(NewsFlash) ->
+  lists:foreach(fun(Listener) ->
+      Listener ! {news_flash, NewsFlash}
+    end, pg2:get_members(canillita_listeners)).
 \end{lstlisting}
 }
 
 \defverbatim[colored]\infosendc{%
 \begin{lstlisting}[frame=single]
 info({news_flash, NewsFlash}, Req, State) ->
-  send_flash(NewsFlash, Req),
+  send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
 send_flash(NewsFlash, Req) ->
 @  Event = canillita_news:get_title(NewsFlash),@
-@  Data  = canillita_news:get_content(NewsFlash),@
-  Chunk =
-  	<<"event: ", Event/binary, "\n",
-  	  "data: ", Data/binary, "\n\n">>,
+@  Content = canillita_news:get_content(NewsFlash),@
+  Chunk = <<"event: ", Event/binary,   "\n",
+            "data: ",  Title/binary,   "\n",
+            "data: ",  Content/binary, "\n\n">>,
   cowboy_req:chunk(Chunk, Req).
+
+notify(NewsFlash) ->
+  lists:foreach(fun(Listener) ->
+      Listener ! {news_flash, NewsFlash}
+    end, pg2:get_members(canillita_listeners)).
 \end{lstlisting}
 }
 
 \defverbatim[colored]\infosendd{%
 \begin{lstlisting}[frame=single]
 info({news_flash, NewsFlash}, Req, State) ->
-  send_flash(NewsFlash, Req),
+  send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
 send_flash(NewsFlash, Req) ->
   Event = canillita_news:get_title(NewsFlash),
-  Data  = canillita_news:get_content(NewsFlash),
-@  Chunk =@
-@  	<<"event: ", Event/binary, "\n",@
-@  	  "data: ", Data/binary, "\n\n">>,@
+  Content = canillita_news:get_content(NewsFlash),
+@  Chunk = <<"event: ", Event/binary,   "\n",@
+@            "data: ",  Title/binary,   "\n",@
+@            "data: ",  Content/binary, "\n\n">>,@
   cowboy_req:chunk(Chunk, Req).
+
+notify(NewsFlash) ->
+  lists:foreach(fun(Listener) ->
+      Listener ! {news_flash, NewsFlash}
+    end, pg2:get_members(canillita_listeners)).
 \end{lstlisting}
 }
 
 \defverbatim[colored]\infosende{%
 \begin{lstlisting}[frame=single]
 info({news_flash, NewsFlash}, Req, State) ->
-  send_flash(NewsFlash, Req),
+  send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
 send_flash(NewsFlash, Req) ->
   Event = canillita_news:get_title(NewsFlash),
-  Data  = canillita_news:get_content(NewsFlash),
-  Chunk =
-  	<<"event: ", Event/binary, "\n",
-  	  "data: ", Data/binary, "\n\n">>,
+  Content = canillita_news:get_content(NewsFlash),
+  Chunk = <<"event: ", Event/binary,   "\n",
+            "data: ",  Title/binary,   "\n",
+            "data: ",  Content/binary, "\n\n">>,
 @  cowboy_req:chunk(Chunk, Req).@
+
+notify(NewsFlash) ->
+  lists:foreach(fun(Listener) ->
+      Listener ! {news_flash, NewsFlash}
+    end, pg2:get_members(canillita_listeners)).
 \end{lstlisting}
 }
 
+\defverbatim[colored]\infosendf{%
+\begin{lstlisting}[frame=single]
+info({news_flash, NewsFlash}, Req, State) ->
+  send_flash(<<"news_flash">>, NewsFlash, Req),
+  {loop, Req, State}.
+
+send_flash(NewsFlash, Req) ->
+  Event = canillita_news:get_title(NewsFlash),
+  Content = canillita_news:get_content(NewsFlash),
+  Chunk = <<"event: ", Event/binary,   "\n",
+            "data: ",  Title/binary,   "\n",
+            "data: ",  Content/binary, "\n\n">>,
+  cowboy_req:chunk(Chunk, Req).
+
+notify(NewsFlash) ->
+  @lists:foreach(@fun(Listener) ->
+      Listener ! {news_flash, NewsFlash}
+    end, @pg2:get_members(canillita_listeners)@).
+\end{lstlisting}
+}
+
+\defverbatim[colored]\infosendg{%
+\begin{lstlisting}[frame=single]
+info({news_flash, NewsFlash}, Req, State) ->
+  send_flash(<<"news_flash">>, NewsFlash, Req),
+  {loop, Req, State}.
+
+send_flash(NewsFlash, Req) ->
+  Event = canillita_news:get_title(NewsFlash),
+  Content = canillita_news:get_content(NewsFlash),
+  Chunk = <<"event: ", Event/binary,   "\n",
+            "data: ",  Title/binary,   "\n",
+            "data: ",  Content/binary, "\n\n">>,
+  cowboy_req:chunk(Chunk, Req).
+
+notify(NewsFlash) ->
+  lists:foreach(@fun(Listener) ->@
+      @Listener ! {news_flash, NewsFlash}@
+    @end@, pg2:get_members(canillita_listeners)).
+\end{lstlisting}
+}
+
+\defverbatim[colored]\canillitanews{%
+\begin{lstlisting}[frame=single]
+sumo_schema() ->
+  sumo:new_schema(?MODULE,
+    [ sumo:new_field(id,            integer,
+                          [id, not_null, auto_increment])
+    , sumo:new_field(title,         text,     [not_null])
+    , sumo:new_field(content,       text,     [not_null])
+    , sumo:new_field(created_at,    datetime, [not_null])
+    , sumo:new_field(updated_at,    datetime, [not_null])
+    ]).
+
+sumo_sleep(NewsFlash) -> NewsFlash.
+
+sumo_wakeup(NewsFlash) -> NewsFlash.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\canillitanewsother{%
+\begin{lstlisting}[frame=single]
+new(Title, Content) ->
+  Now = {datetime, calendar:universal_time()},
+  NewsFlash = [ {title,       Title}
+              , {content,     Content}
+              , {created_at,  Now}
+              , {updated_at,  Now}],
+  sumo:persist(canillita_news, NewsFlash).
+
+get_title(NewsFlash) ->
+  proplists:get_value(title, NewsFlash).
+get_content(NewsFlash) ->
+  proplists:get_value(content, NewsFlash).
+
+latest_news() -> sumo:find_all(canillita_news).
+\end{lstlisting}
+}
+
+\defverbatim[colored]\canillitanewsothera{%
+\begin{lstlisting}[frame=single]
+@new(Title, Content) ->@
+@  Now = {datetime, calendar:universal_time()},@
+@  NewsFlash = [ {title,       Title}@
+@              , {content,     Content}@
+@              , {created_at,  Now}@
+@              , {updated_at,  Now}],@
+@  sumo:persist(canillita_news, NewsFlash).@
+
+get_title(NewsFlash) ->
+  proplists:get_value(title, NewsFlash).
+get_content(NewsFlash) ->
+  proplists:get_value(content, NewsFlash).
+
+latest_news() -> sumo:find_all(canillita_news).
+\end{lstlisting}
+}
+
+\defverbatim[colored]\canillitanewsotherb{%
+\begin{lstlisting}[frame=single]
+new(Title, Content) ->
+  Now = {datetime, calendar:universal_time()},
+  NewsFlash = [ {title,       Title}
+              , {content,     Content}
+              , {created_at,  Now}
+              , {updated_at,  Now}],
+  sumo:persist(canillita_news, NewsFlash).
+
+@get_title(NewsFlash) ->@
+@  proplists:get_value(title, NewsFlash).@
+@get_content(NewsFlash) ->@
+@  proplists:get_value(content, NewsFlash).@
+
+latest_news() -> sumo:find_all(canillita_news).
+\end{lstlisting}
+}
+
+\defverbatim[colored]\canillitanewsotherc{%
+\begin{lstlisting}[frame=single]
+new(Title, Content) ->
+  Now = {datetime, calendar:universal_time()},
+  NewsFlash = [ {title,       Title}
+              , {content,     Content}
+              , {created_at,  Now}
+              , {updated_at,  Now}],
+  sumo:persist(canillita_news, NewsFlash).
+
+get_title(NewsFlash) ->
+  proplists:get_value(title, NewsFlash).
+get_content(NewsFlash) ->
+  proplists:get_value(content, NewsFlash).
+
+@latest_news() -> sumo:find_all(canillita_news).@
+\end{lstlisting}
+}
 
 \defverbatim[colored]\postsample{%
 \begin{lstlisting}[language=bash]
@@ -661,8 +826,7 @@ data: el publico observa esta diapositiva :P
 \end{itemize}
 \end{frame}
 
-\section{Componentes}
-\subsection{Handlers}
+\subsection{Componentes}
 \begin{frame}[t]{Cowboy Handler}
 \alert{\texttt{canillita\_news\_handler}}
 \begin{itemize}
@@ -690,7 +854,7 @@ En la funci\'on \texttt{init} se determina qu\'e handler utilizar:
 {La funci\'on \texttt{handle\_post}}
 \only<1>{\handlepost}
 \only<2>{\handleposta Obtiene el \emph{body} del request}
-\only<3>{\handlepostb Lo parsea como json}
+\only<3>{\handlepostb Lo parsea como JSON}
 \only<4>{\handlepostc Extrae los campos \texttt{title} y \texttt{content}}
 \only<5>{\handlepostd Crea y almacena la noticia}
 \only<6>{\handleposte La env\'ia a quienes est\'en escuchando}
@@ -700,7 +864,7 @@ En la funci\'on \texttt{init} se determina qu\'e handler utilizar:
 \begin{frame}{Loop Handler}
 \begin{itemize}
 	\item en nuestro handler, desde \texttt{init} estamos llamando a \texttt{handle\_get}
-	\item m\'as all\'a de \texttt{init} y \texttt{handle\_get}, \texttt{cowboy\_req} define una \'unica funci\'on para implementar un \emph{loop handler}: \texttt{info}
+	\item m\'as all\'a de \texttt{init}, \texttt{cowboy\_req} define una \'unica funci\'on para implementar un \emph{loop handler}: \texttt{info}
 	\item es llamada cada vez que el proceso recibe un mensaje
 \end{itemize}
 \end{frame}
@@ -712,20 +876,99 @@ En la funci\'on \texttt{init} se determina qu\'e handler utilizar:
 \only<3>{\handlegetb Obtiene las noticias de la base de datos}
 \only<4>{\handlegetc Env\'ia cada una de ellas usando la funci\'on \texttt{send\_flash}}
 \only<5>{\handlegetd Se subscribe para recibir futuras noticias}
-\only<6>{\handlegete y comienza a girar :)}
+\only<6>{\handlegete y se queda esperando mensajes, que llegar\'an a \texttt{info}}
 \end{frame}
 
 \begin{frame}[t]{Loop Handler}
 {Otras funciones}
 \only<1>{\infosend}
 \only<2>{\infosenda La funci\'on \texttt{info}, env\'ia la noticia}
-\only<3>{\infosendb La funci\'on \texttt{info}, env\'ia la noticia y sigue girando :)}
+\only<3>{\infosendb y vuelve a esperar mensajes}
 \only<4>{\infosendc La funci\'on \texttt{send\_flash} extrae los campos de la noticia}
-\only<5>{\infosendd Compone un bloque de texto a enviar}
-\only<6>{\infosende Y lo env\'ia al cliente}
+\only<5>{\infosendd compone un bloque de texto a enviar}
+\only<6>{\infosende y lo env\'ia al cliente}
+\only<7>{\infosendf La funci\'on \texttt{notify} recorre la lista de subscriptos}
+\only<8>{\infosendg y le env\'ia un mensaje a cada uno}
+\end{frame}
+
+\begin{frame}{SumoDB Document}
+\alert{\texttt{canillita\_news}}
+\begin{itemize}
+	\item Implementa el behaviour \texttt{sumo\_doc}
+	\item Encapsula estado y comportamiento del modelo \textbf{News}
+	\item Administra su persistencia a trav\'es de \emph{SumoDB}
+\end{itemize}
+\pause
+~\\
+El behaviour \texttt{sumo\_doc} define tres funciones a implementar:
+\begin{itemize}
+	\item\texttt{sumo\_schema}: definici\'on del modelo
+	\item\texttt{sumo\_sleep}: traducci\'on al formato de \emph{SumoDB}
+	\item\texttt{sumo\_wakeup}: traducci\'on a nuestro formato
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Canillita News}
+{Behaviour Callbacks}
+\canillitanews
+\end{frame}
+
+\begin{frame}[t]{Canillita News}
+{Otras funciones}
+\only<1>{\canillitanewsother}
+\only<2>{\canillitanewsothera La funci\'on \texttt{new}, crea una entidad y la persiste}
+\only<3>{\canillitanewsotherb Las funciones \texttt{get\_*} son simples proyectores}
+\only<4>{\canillitanewsotherc La funci\'on \texttt{latest\_news} retorna todos las entidades}
+\end{frame}
+
+\section{Benchmarks}
+\subsection{Herramientas}
+\begin{frame}{Tsung}
+\center{\includegraphics[height=0.25\textheight]{img/tsung-logo.png}}
+	\begin{itemize}
+		\item \href{http://tsung.erlang-projects.org/}{http://tsung.erlang-projects.org/}
+		\item<+-> Herramienta de medici\'on de carga multi-protocolo distribuida
+		\item<+-> Hecha en Erlang
+		\item<+-> Puede utilizarse tambi\'en para testear
+	\end{itemize}
+\end{frame}
+
+\subsection{Resultados}
+\begin{frame}{Escenario}
+	\begin{description}
+		\item[Test]\begin{itemize}
+			\item Duraci\'on: 500 segundos
+			\item Requests a \texttt{POST /news}: 1 por segundo
+			\item Requests a \texttt{GET /news}: 50 por segundo
+		\end{itemize}
+		\item[Hardware]\begin{itemize}
+			\item MacBook PRO con OSX 10.9
+			\item Procesador: 2.4 GHz Intel Core i5
+			\item Memoria: 8 GB 1600 MHz DDR3
+		\end{itemize}
+	\end{description}
+
+\end{frame}
+
+\begin{frame}[t]{Usuarios conectados}
+\center{\includegraphics[height=.7\textheight]{img/graphes-simultaneous-users.png}} \\
+Un servidor \emph{b'asico} soporta m\'as de 4500 conexiones
+\end{frame}
+
+\begin{frame}[t]{Status Codes}
+\center{\includegraphics[height=.7\textheight]{img/graphes-http_code.png}} \\
+Todos los requests se procesan exitosamente
 \end{frame}
 
 \appendix
+
+\begin{frame}{Moraleja}
+
+	\emph{Erlang} es un lenguaje complejo, no es sencillo dominarlo r\'apidamente. \pause Sin embargo, para ciertos escenarios habituales no resulta dif\'icil construir las aplicaciones necesarias e integrarlas con otros sistemas sin conocer el lenguaje a fondo. \\
+	\pause Y esas aplicaciones traen \emph{gratis} todas las ventajas de Erlang, como \emph{supervisi\'on de procesos}, \emph{manejo de m\'ultiples nodos}, etc. \\
+	\pause Adem\'as, con ese punto de partida, se puede continuar aprendiendo el lenguaje paso a paso.
+	
+\end{frame}
 
 \begin{frame}{Materiales}
 	\begin{description}
