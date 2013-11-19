@@ -383,8 +383,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
-send_flash(NewsFlash, Req) ->
-  Event = canillita_news:get_title(NewsFlash),
+send_flash(Event, NewsFlash, Req) ->
+  Title = canillita_news:get_title(NewsFlash),
   Content = canillita_news:get_content(NewsFlash),
   Chunk = <<"event: ", Event/binary,   "\n",
             "data: ",  Title/binary,   "\n",
@@ -404,8 +404,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   @send_flash(<<"news_flash">>, NewsFlash, Req),@
   {loop, Req, State}.
 
-send_flash(NewsFlash, Req) ->
-  Event = canillita_news:get_title(NewsFlash),
+send_flash(Event, NewsFlash, Req) ->
+  Title = canillita_news:get_title(NewsFlash),
   Content = canillita_news:get_content(NewsFlash),
   Chunk = <<"event: ", Event/binary,   "\n",
             "data: ",  Title/binary,   "\n",
@@ -425,8 +425,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   send_flash(<<"news_flash">>, NewsFlash, Req),
   @{loop, Req, State}.@
 
-send_flash(NewsFlash, Req) ->
-  Event = canillita_news:get_title(NewsFlash),
+send_flash(Event, NewsFlash, Req) ->
+  Title = canillita_news:get_title(NewsFlash),
   Content = canillita_news:get_content(NewsFlash),
   Chunk = <<"event: ", Event/binary,   "\n",
             "data: ",  Title/binary,   "\n",
@@ -446,8 +446,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
-send_flash(NewsFlash, Req) ->
-@  Event = canillita_news:get_title(NewsFlash),@
+send_flash(Event, NewsFlash, Req) ->
+@  Title = canillita_news:get_title(NewsFlash),@
 @  Content = canillita_news:get_content(NewsFlash),@
   Chunk = <<"event: ", Event/binary,   "\n",
             "data: ",  Title/binary,   "\n",
@@ -467,8 +467,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
-send_flash(NewsFlash, Req) ->
-  Event = canillita_news:get_title(NewsFlash),
+send_flash(Event, NewsFlash, Req) ->
+  Title = canillita_news:get_title(NewsFlash),
   Content = canillita_news:get_content(NewsFlash),
 @  Chunk = <<"event: ", Event/binary,   "\n",@
 @            "data: ",  Title/binary,   "\n",@
@@ -488,8 +488,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
-send_flash(NewsFlash, Req) ->
-  Event = canillita_news:get_title(NewsFlash),
+send_flash(Event, NewsFlash, Req) ->
+  Title = canillita_news:get_title(NewsFlash),
   Content = canillita_news:get_content(NewsFlash),
   Chunk = <<"event: ", Event/binary,   "\n",
             "data: ",  Title/binary,   "\n",
@@ -509,8 +509,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
-send_flash(NewsFlash, Req) ->
-  Event = canillita_news:get_title(NewsFlash),
+send_flash(Event, NewsFlash, Req) ->
+  Title = canillita_news:get_title(NewsFlash),
   Content = canillita_news:get_content(NewsFlash),
   Chunk = <<"event: ", Event/binary,   "\n",
             "data: ",  Title/binary,   "\n",
@@ -530,8 +530,8 @@ info({news_flash, NewsFlash}, Req, State) ->
   send_flash(<<"news_flash">>, NewsFlash, Req),
   {loop, Req, State}.
 
-send_flash(NewsFlash, Req) ->
-  Event = canillita_news:get_title(NewsFlash),
+send_flash(Event, NewsFlash, Req) ->
+  Title = canillita_news:get_title(NewsFlash),
   Content = canillita_news:get_content(NewsFlash),
   Chunk = <<"event: ", Event/binary,   "\n",
             "data: ",  Title/binary,   "\n",
