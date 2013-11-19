@@ -643,7 +643,7 @@ get_content(NewsFlash) ->
 \begin{lstlisting}[language=bash]
 curl -vX POST http://localhost:4004/news \
 -H"Content-Type:application/json" \
--d'{ "source": "RubyConf", 
+-d'{ "title": "Tu Primer Servidor Erlang con SSE", 
      "content": "@elbrujohalcon muestra su sistema para ..." }'
 \end{lstlisting}
 }
@@ -694,7 +694,8 @@ curl -vX GET http://localhost:4004/news
 < date: Thu, 07 Nov 2013 14:31:10 GMT
 < content-type: text/event-stream
 <
-event: RubyConf
+event: old_news_flash
+data: Nueva charla en la RubyConfAR!
 data: La charla de @elbrujohalcon esta por comenzar
 
 \end{lstlisting}
@@ -702,7 +703,8 @@ data: La charla de @elbrujohalcon esta por comenzar
 
 \defverbatim[colored]\getsamplerespa{%
 \begin{lstlisting}[language=bash]
-event: RubyConf
+event: news_flash
+data: Tu Primer Servidor Erlang con SSE
 data: @elbrujohalcon muestra su sistema para ...
 
 \end{lstlisting}
@@ -710,7 +712,8 @@ data: @elbrujohalcon muestra su sistema para ...
 
 \defverbatim[colored]\getsamplerespb{%
 \begin{lstlisting}[language=bash]
-event: RubyConf 
+event: news_flash
+data: Gran Concurrencia!
 data: el publico observa esta diapositiva :P
 
 \end{lstlisting}
@@ -723,7 +726,7 @@ data: el publico observa esta diapositiva :P
 \begin{frame}{Hello World!}
 	\begin{itemize}
 		\item<1> Soy programador desde que ten\'ia 10 a\~nos
-		\item<2> Hago programaci\'on \emph{funcional} desde hace 5 a\~nos, en \emph{Erlang}
+		\item<2> Hago programaci\'on \emph{funcional} hace 5 a\~nos, en \emph{Erlang}
 		\item<3> Soy \emph{Director of Engineering} en \textbf{Inaka}
 		\item<4> Me dedico a dise\~nar y, a veces, construir servidores
 		\item<5> \textbf{No soy} un programador \emph{Ruby}
@@ -741,19 +744,23 @@ data: el publico observa esta diapositiva :P
 			\item Servidor con API tipo REST
 			\item Clientes necesitan actualizaciones en \emph{Real-Time}
 		\end{itemize}
-	\ \\
 	\pause
 	\item[Soluci\'on]
 		\begin{itemize}
 			\item Se puede resolver con \emph{Ruby}? \textbf{S\'i}
 			\item Existen otras soluciones? \textbf{S\'i}
 		\end{itemize}
-	\ \\
 	\pause
 	\item[Erlang]
 		\begin{itemize}
-			\item Es un paradigma distinto, requiere aprendizaje
 			\item Es \textbf{ideal} para este tipo de escenarios
+			\item Trae \emph{de f\'abrica}:
+			\begin{itemize}
+				\item Concurrencia con procesos livianos
+				\item Comunicaci\'on por env\'io de mensajes
+				\item Supervisi\'on de procesos
+				\item Escalabilidad horizontal \emph{autom\'atica}
+			\end{itemize}
 		\end{itemize}
 \end{description}
 
@@ -765,7 +772,7 @@ data: el publico observa esta diapositiva :P
 	\alert{En esta charla}
 		\begin{itemize} \itemsep1em
 			\item<+-> SSE
-			\item<+-> Erlang / OTP \emph{b\'asico}
+			\item<+-> Erlang \emph{b\'asico}
 			\item<+-> Sumo DB \emph{b\'asico}
 			\item<+-> Cowboy \emph{b\'asico}
 		\end{itemize}
@@ -773,7 +780,7 @@ data: el publico observa esta diapositiva :P
 	\alert{Fuera de esta charla}
 		\begin{itemize} \itemsep1em
 			\item<+-> REST \emph{avanzado}
-			\item<+-> Erlang / OTP \emph{avanzado}
+			\item<+-> Erlang \emph{avanzado} / OTP
 			\item<+-> Sumo DB \emph{avanzado}
 			\item<+-> Elixir
 		\end{itemize}
@@ -789,8 +796,7 @@ data: el publico observa esta diapositiva :P
 	\alert{\textit{{\huge Canillita}}}
 	\ \\
 	\ \\
-	Simple API con dos endpoints:
-	\ \\
+	Provee una API sencilla con dos endpoints:
 	\ \\
 		\begin{description}
 			\item[POST /news]\ \\ para publicar noticias
@@ -799,16 +805,16 @@ data: el publico observa esta diapositiva :P
 \end{multicols}
 \end{frame}
 
-\begin{frame}{Ejemplos}
+\begin{frame}[t]{Ejemplos}
 \alert{\texttt{POST /news}}
 \postsample
 \visible<2>\postsampleresp
 \end{frame}
 
-\begin{frame}{Ejemplos}
+\begin{frame}[t]{Ejemplos}
 \alert{\texttt{GET /news}}
 \only<1,2>\getsample
-\only<1,2,3>{\visible<2,3>\getsampleresph}
+\only<1,2>{\visible<2,3>\getsampleresph}
 \visible<2,3,4>\getsampleresphh
 \visible<3,4>\getsamplerespa
 \visible<4>\getsamplerespb
@@ -922,6 +928,10 @@ El behaviour \texttt{sumo\_doc} define tres funciones a implementar:
 \end{frame}
 
 \section{Benchmarks}
+\begin{frame}
+\center\Huge >Y qu\'e tal funciona?
+\end{frame}
+
 \subsection{Herramientas}
 \begin{frame}{Tsung}
 \center{\includegraphics[height=0.25\textheight]{img/tsung-logo.png}}
@@ -952,7 +962,7 @@ El behaviour \texttt{sumo\_doc} define tres funciones a implementar:
 
 \begin{frame}[t]{Usuarios conectados}
 \center{\includegraphics[height=.7\textheight]{img/graphes-simultaneous-users.png}} \\
-Un servidor \emph{b'asico} soporta m\'as de 4500 conexiones
+Un servidor \emph{b\'asico} soporta m\'as de 4500 conexiones
 \end{frame}
 
 \begin{frame}[t]{Status Codes}
@@ -964,8 +974,8 @@ Todos los requests se procesan exitosamente
 
 \begin{frame}{Moraleja}
 
-	\emph{Erlang} es un lenguaje complejo, no es sencillo dominarlo r\'apidamente. \pause Sin embargo, para ciertos escenarios habituales no resulta dif\'icil construir las aplicaciones necesarias e integrarlas con otros sistemas sin conocer el lenguaje a fondo. \\
-	\pause Y esas aplicaciones traen \emph{gratis} todas las ventajas de Erlang, como \emph{supervisi\'on de procesos}, \emph{manejo de m\'ultiples nodos}, etc. \\
+	Construir tu primer sistema en \emph{Erlang} puede ser algo costoso y hasta abrumador. \pause Sin embargo, para ciertos escenarios habituales no resulta dif\'icil construir las aplicaciones necesarias e integrarlas con otros sistemas, a\'un sin dominar su arquitectura a fondo. \\
+	\pause Y esas aplicaciones traen \emph{gratis} todas las ventajas de Erlang, como \emph{escalabilidad horizontal}, \emph{supervisi\'on de procesos}, \emph{manejo de m\'ultiples nodos}, etc. \\
 	\pause Adem\'as, con ese punto de partida, se puede continuar aprendiendo el lenguaje paso a paso.
 	
 \end{frame}
