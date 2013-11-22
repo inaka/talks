@@ -110,6 +110,86 @@ resource_exists(Req, State) ->
 \end{lstlisting}
 }
 
+\defverbatim[colored]\erlang{%
+\begin{lstlisting}[frame=single]
+send_if_found(Key, Hash, Pid) ->
+	case proplists:get_value(Key, Hash) of
+		undefined -> do_nothing;
+		Value -> Pid ! {value, Value}
+	end.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\erlanga{%
+\begin{lstlisting}[frame=single]
+@send_if_found@(Key, Hash, Pid) ->
+	case proplists:get_value(Key, Hash) of
+		undefined -> do_nothing;
+		Value -> Pid ! {value, Value}
+	end.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\erlangb{%
+\begin{lstlisting}[frame=single]
+send_if_found(@Key, Hash, Pid@) ->
+	case proplists:get_value(Key, Hash) of
+		undefined -> do_nothing;
+		Value -> Pid ! {value, Value}
+	end.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\erlangc{%
+\begin{lstlisting}[frame=single]
+send_if_found(Key, Hash, Pid) ->
+	@case@ proplists:get_value(Key, Hash) @of@
+		undefined @->@ do_nothing@;@
+		Value @->@ Pid ! {value, Value}
+	@end@.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\erlangd{%
+\begin{lstlisting}[frame=single]
+send_if_found(Key, Hash, Pid) ->
+	case @proplists:get_value(Key, Hash)@ of
+		undefined -> do_nothing;
+		Value -> Pid ! {value, Value}
+	end.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\erlange{%
+\begin{lstlisting}[frame=single]
+send_if_found(Key, Hash, Pid) ->
+	case proplists:get_value(Key, Hash) of
+		undefined -> do_nothing;
+		Value -> Pid ! @{value, Value}@
+	end.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\erlangf{%
+\begin{lstlisting}[frame=single]
+send_if_found(Key, Hash, Pid) ->
+	case proplists:get_value(Key, Hash) of
+		undefined -> do_nothing;
+		Value -> Pid @!@ {value, Value}
+	end.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\erlangg{%
+\begin{lstlisting}[frame=single]
+send_if_found(Key, Hash, Pid) ->
+	case proplists:get_value(Key, Hash) of
+		undefined -> @do_nothing@;
+		Value -> Pid ! {value, Value}
+	end.
+\end{lstlisting}
+}
+
 \defverbatim[colored]\handlepost{%
 \begin{lstlisting}[frame=single]
 handle_post(Req, State) ->
@@ -833,6 +913,18 @@ data: el publico observa esta diapositiva :P
 \end{frame}
 
 \subsection{Componentes}
+\begin{frame}[t]{Sintaxis}
+\visible<1>{Antes de continuar, un poco de sintaxis Erlang\ldots}~\\~\\
+\only<1>{\erlang}
+\only<2>{\erlanga \'Esta es la funci\'on \texttt{send\_if\_found}}
+\only<3>{\erlangb Tiene 3 argumentos, cada uno de ellos se asocia a una variable}
+\only<4>{\erlangc \'Esta es una estructura de \texttt{case}. Cada cl\'ausula comienza con $->$ y culmina con \texttt{;}}
+\only<5>{\erlangd En esta expresi\'on se eval\'ua la funci\'on \texttt{get\_value} del m\'odulo \texttt{proplists}}
+\only<6>{\erlange En esta cl\'ausula se construye una \emph{tupla} con el \'atomo \texttt{value} y el valor encontrado en el hash}
+\only<7>{\erlangf Y se env\'ia esa tupla al proceso \texttt{Pid}}
+\only<8>{\erlangg Todas las cl\'asuelas deben devolver algo, por eso \'esta devuelve el \'atomo \texttt{do\_nothing}}
+\end{frame}
+
 \begin{frame}[t]{Cowboy Handler}
 \alert{\texttt{canillita\_news\_handler}}
 \begin{itemize}
