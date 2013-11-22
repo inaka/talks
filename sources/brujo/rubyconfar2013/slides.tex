@@ -15,7 +15,7 @@
   \pushQED{#1}%
   \begin{quote}
 }{%
-  \par\noindent\hfill(\popQED)%
+  \raggedleft\par\noindent\hfill(\popQED)%
   \end{quote}%
 }
 
@@ -1053,16 +1053,24 @@ El behaviour \texttt{sumo\_doc} define tres funciones a implementar:
 \end{frame}
 
 \begin{frame}[t]{Usuarios conectados}
-\center{\includegraphics[height=.7\textheight]{img/graphes-simultaneous-users.png}} \\
-Un servidor \emph{b\'asico} soporta m\'as de 4500 conexiones
+\only<1>{\center{\includegraphics[height=.6\textheight]{img/graphes-simultaneous-users-ruby.png}} \\
+Un servidor \emph{b\'asico} en \emph{Ruby} soport\'o cerca de \textbf{1000} conexiones simult\'aneas y luego la virtual muri\'o}
+\only<2>{\center{\includegraphics[height=.6\textheight]{img/graphes-simultaneous-users.png}} \\
+Un servidor \emph{b\'asico} en \emph{Erlang} soport\'o m\'as de \textbf{4500} conexiones simult\'aneas y luego comenz\'o a no responder a nuevas conexiones}
 \end{frame}
 
-\begin{frame}[t]{Status Codes}
-\center{\includegraphics[height=.7\textheight]{img/graphes-http_code.png}} \\
-Todos los requests se procesan exitosamente
+\subsection{Conclusiones}
+\begin{frame}[t]{}{}
+{\Large Entonces\ldots\\~\\ >\textbf{Erlang} es mejor que \textbf{Ruby} en este caso?}
+\pause \\
+\begin{aquote}{Warren Sanchez}
+{\Huge Yo qu\'e s\'e}
+\end{aquote}
+\pause ~\\
+{\Large Lo que s\'e es que \textbf{mi} servidor \textbf{Erlang} es mejor que \textbf{mi} servidor \textbf{Ruby} en este caso}
+\pause ~\\~\\
+\raggedleft{\huge Y eso no es poco!! :)}
 \end{frame}
-
-\appendix
 
 \begin{frame}{Moraleja}
 
@@ -1071,6 +1079,8 @@ Todos los requests se procesan exitosamente
 	\pause Adem\'as, con ese punto de partida, se puede continuar aprendiendo el lenguaje paso a paso.
 	
 \end{frame}
+
+\appendix
 
 \begin{frame}{Materiales}
 	\begin{description}
