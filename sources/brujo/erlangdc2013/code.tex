@@ -1,0 +1,144 @@
+\documentclass[utf8,hyperref={colorlinks=true}]{beamer}
+\definecolor{links}{HTML}{2A1B81}
+\hypersetup{colorlinks,linkcolor=,urlcolor=links}
+\mode<presentation>
+\usepackage{multicol}
+\usepackage{listings}
+\usepackage{helvet}
+\usepackage{tikz}
+\usetheme{Warsaw}
+\usecolortheme{whale}
+\usefonttheme[onlylarge]{structuresmallcapsserif}
+\usefonttheme[onlysmall]{structurebold}
+\usepackage{amsthm} % pushQED, popQED
+
+\setbeamertemplate{footline}{}
+\setbeamertemplate{navigation symbols}{}
+
+\makeatletter
+\newenvironment{btHighlight}[1][]
+{\begingroup\tikzset{bt@Highlight@par/.style={#1}}\begin{lrbox}{\@tempboxa}}
+{\end{lrbox}\bt@HL@box[bt@Highlight@par]{\@tempboxa}\endgroup}
+
+\newcommand\btHL[1][]{%
+  \begin{btHighlight}[#1]\bgroup\aftergroup\bt@HL@endenv%
+}
+\def\bt@HL@endenv{%
+  \end{btHighlight}%   
+  \egroup
+}
+\newcommand{\bt@HL@box}[2][]{%
+  \tikz[#1]{%
+    \pgfpathrectangle{\pgfpoint{1pt}{0pt}}{\pgfpoint{\wd #2}{\ht #2}}%
+    \pgfusepath{use as bounding box}%
+    \node[anchor=base west, fill=orange!30,outer sep=0pt,inner xsep=1pt, inner ysep=0pt, rounded corners=3pt, minimum height=\ht\strutbox+1pt,#1]{\raisebox{1pt}{\strut}\strut\usebox{#2}};
+  }%
+}
+\makeatother
+
+%\usebackgroundtemplate%
+{%
+%    \includegraphics[width=\paperwidth,height=\paperheight]{newton.jpg}%
+%}
+
+
+\begin{document}
+
+\newcommand*\oldmacro{}%
+\let\oldmacro\insertshorttitle%
+\renewcommand*\insertshorttitle{%
+  \oldmacro\hfill%
+  \insertframenumber\,/\,\inserttotalframenumber}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CODE SNIPPETS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{darkblue}{rgb}{0,0.08,0.45} 
+
+\lstset{% general command to set parameter(s)
+		mathescape=true,
+		language=erlang,
+		basicstyle=\ttfamily\large,
+		keywordstyle=\color{blue}\bfseries,
+		identifierstyle=\color{darkblue},
+		stringstyle=\ttfamily,
+		moredelim=**[is][{\btHL[fill=green!30,draw=red,dashed,thin]}]{@}{@},
+		showstringspaces=false}
+
+\defverbatim[colored]\codeblocka{%
+\begin{lstlisting}[]
+1> lucene_server:start().
+ok
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockb{%
+\begin{lstlisting}[]
+2> User1 =
+	[{name, "Fernando"}
+	,{nick, "elbrujohalcon"}].
+[{name, "Fernando"},{nick, "elbrujohalcon"}]
+
+3> User2 =
+	[{name, "Ariel Ortega"}
+	,{nick, "burrito"}].
+[{name, "Ariel Ortega"},{nick, "burrito"}]
+
+4> lucene:add([User1,User2]).
+ok
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockc{%
+\begin{lstlisting}[]
+5> lucene:match("nick: b*", 10).
+{[[{name,"Fernando Benavides"},
+   {nick,"elbrujohalcon"},
+   {'`score',1.0}]],
+ [{total_hits,1},
+  {first_hit,1},
+  {query_time,783},
+  {search_time,457}]}
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockd{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+6> lucene:add([[{code, X}] || X <- lists:seq(1,10)]).
+ok
+
+7> {_, M} = lucene:match("code:[0 TO 10]", 5).
+{[[{code,1},{'`score',1.0}],
+  [{code,2},{'`score',1.0}],
+  [{code,3},{'`score',1.0}],
+  [{code,4},{'`score',1.0}],
+  [{code,5},{'`score',1.0}]],
+ [{total_hits,10},
+  {first_hit,1},
+  {query_time,14335},
+  {search_time,3811},
+  {next_page,<<172,237,0,5,115,114,0,36,99,111,109,46,
+               116,105,103,101,114,116,101,120,...>>}]}
+
+8> lucene:continue(proplists:get_value(next_page, M), 5).
+{[[{code,6},{'`score',1.0}],
+  [{code,7},{'`score',1.0}],
+  [{code,8},{'`score',1.0}],
+  [{code,9},{'`score',1.0}],
+  [{code,10},{'`score',1.0}]],
+ [{total_hits,10},
+  {first_hit,6},
+  {query_time,2368},
+  {search_time,1731}]}
+\end{lstlisting}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{}{}
+\only<+>{\codeblocka}
+\only<+>{\codeblockb}
+\only<+>{\codeblockc}
+\only<+>{\codeblockd}
+\end{frame}
+
+\end{document}
