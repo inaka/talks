@@ -216,6 +216,62 @@ public static void main(String[] args) {
 \end{lstlisting}
 }
 
+\defverbatim[colored]\codeblocki{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+public abstract class OtpGenServer extends OtpSysProcess {
+  protected OtpGenServer(OtpNode host) {
+    super(host);
+  }
+
+  protected OtpGenServer(OtpNode host, String name) {
+    super(host, name);
+  }
+...
+  protected abstract OtpErlangObject @handleCall@(
+      OtpErlangObject cmd, OtpErlangTuple from)
+      throws OtpStopException, OtpContinueException,
+      OtpErlangException;
+
+  protected abstract void @handleCast@(OtpErlangObject cmd)
+      throws OtpStopException, OtpErlangException;
+
+  protected abstract void @handleInfo@(OtpErlangObject cmd)
+      throws OtpStopException;
+
+  protected abstract void @terminate@(OtpErlangException oee);
+
+}
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockj{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+protected OtpErlangObject handleCall(OtpErlangObject cmd,
+    OtpErlangTuple from)
+    throws OtpStopException, OtpContinueException,
+    OtpErlangException {
+    
+  OtpErlangTuple cmdTuple = (OtpErlangTuple) cmd;
+  OtpErlangAtom cmdName = (OtpErlangAtom) cmdTuple.elementAt(0);
+  
+  if (cmdName.atomValue().equals("pid")) {
+    return super.getSelf();
+  } else if (cmdName.atomValue().equals("match")) {
+    String queryString =
+      ((OtpErlangString) cmdTuple.elementAt(1)).stringValue();
+    int pageSize =
+      ((OtpErlangLong) cmdTuple.elementAt(2)).intValue();
+
+    runMatch(queryString, pageSize, from);
+    
+    throw new OtpContinueException();
+
+  } else
+...
+}
+\end{lstlisting}
+}
+
 \lstset{% general command to set parameter(s)
 		mathescape=true,
 		language=erlang,
@@ -226,6 +282,29 @@ public static void main(String[] args) {
 		moredelim=**[is][{\btHL[fill=green!30,draw=red,dashed,thin]}]{@}{@},
 		showstringspaces=false}
 
+
+\defverbatim[colored]\codeblockh{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+do_call(Process, Label, Request, Timeout) ->
+    try erlang:monitor(process, Process) of
+        Mref ->
+...
+    catch
+        error:_ ->
+            %% Node (C/Java?) is not supporting the monitor.
+            %% The other possible case -- this node is not 
+            %% distributed -- should have been handled earlier.
+            %% Do the best possible with monitor_node/2.
+            %% This code may hang indefinitely if the Process 
+            %% does not exist. It is only used for featureweak
+            %% remote nodes.
+            Node = get_node(Process),
+            monitor_node(Node, true),
+...
+    end.
+\end{lstlisting}
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[plain]{}{}
 \only<+>{\codeblocka}
@@ -235,6 +314,9 @@ public static void main(String[] args) {
 \only<+>{\codeblocke}
 \only<+>{\codeblockf}
 \only<+>{\codeblockg}
+\only<+>{\codeblockh}
+\only<+>{\codeblocki}
+\only<+>{\codeblockj}
 \end{frame}
 
 \end{document}
