@@ -133,12 +133,108 @@ ok
 \end{lstlisting}
 }
 
+\defverbatim[colored]\codeblocke{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+{pre_hooks, [{compile, "mkdir -p bin"},
+             {compile, "./copy-jinterface.sh"}]}.
+
+{post_hooks,
+  [{clean,
+    "rm -rf bin priv/lucene_server.jar priv/OtpErlang.jar"},
+   {compile,
+    "javac -g -deprecation -sourcepath java_src 
+           -classpath ./bin:./priv/* -d bin
+           java_src/*/*/*/*.java"},
+   {compile, "jar cf priv/lucene-server.jar -C bin ."}]}.
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockf{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+init([]) ->
+...
+  Port =
+    @erlang:open_port@(
+      {@spawn_executable@, Java},
+      [{line,1000}, stderr_to_stdout,
+       {args, JavaArgs ++
+                    ["-classpath", Classpath,
+                     "com.tigertext.lucene.LuceneNode",
+                     ThisNode, JavaNode, erlang:get_cookie(),
+                     integer_to_list(AllowedThreads)]}]),
+  @wait_for_ready@(
+    #state{java_port = Port, java_node = JavaNode})
+end.
+...
+wait_for_ready(State = #state{java_port = Port}) ->
+  receive
+    {Port, {data, {eol, "READY"}}} ->
+      true = @link(process())@,
+      true = @erlang:monitor_node(State#state.java_node, true)@,
+      {ok, State};
+    Info ->
+      ...
+  end.
+\end{lstlisting}
+}
+
+\lstset{% general command to set parameter(s)
+		mathescape=true,
+		language=java,
+		basicstyle=\ttfamily\large,
+		keywordstyle=\color{blue}\bfseries,
+		identifierstyle=\color{darkblue},
+		stringstyle=\ttfamily,
+		moredelim=**[is][{\btHL[fill=green!30,draw=red,dashed,thin]}]{@}{@},
+		showstringspaces=false}
+
+\defverbatim[colored]\codeblockg{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+public static void main(String[] args) {
+  String peerName = args.length >= 1 ? args[0]
+      : "lucene_server@localhost";
+  String nodeName = args.length >= 2 ? args[1]
+      : "lucene_server_java@localhost";
+
+  try {
+    NODE = args.length >= 3 ? @new OtpNode(nodeName, args[2])@
+        : @new OtpNode(nodeName)@;
+    PEER = peerName;
+
+    final OtpGenServer server = @new LuceneServer(NODE)@;
+
+    server.start();
+
+    @System.out.println("READY")@;
+
+  } catch (IOException e1) {
+    jlog.severe("Couldn't create node: " + e1);
+    e1.printStackTrace();
+    System.exit(1);
+  }
+}
+\end{lstlisting}
+}
+
+\lstset{% general command to set parameter(s)
+		mathescape=true,
+		language=erlang,
+		basicstyle=\ttfamily\large,
+		keywordstyle=\color{blue}\bfseries,
+		identifierstyle=\color{darkblue},
+		stringstyle=\ttfamily,
+		moredelim=**[is][{\btHL[fill=green!30,draw=red,dashed,thin]}]{@}{@},
+		showstringspaces=false}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{}{}
+\begin{frame}[plain]{}{}
 \only<+>{\codeblocka}
 \only<+>{\codeblockb}
 \only<+>{\codeblockc}
 \only<+>{\codeblockd}
+\only<+>{\codeblocke}
+\only<+>{\codeblockf}
+\only<+>{\codeblockg}
 \end{frame}
 
 \end{document}
