@@ -305,6 +305,49 @@ do_call(Process, Label, Request, Timeout) ->
 \end{lstlisting}
 }
 
+\defverbatim[colored]\codeblockk{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+9> lucene:add(
+    [[{index, I},{location, @lucene_utils:geo(I/2,I+1.5)@}]
+     || I <- lists:seq(-10,10)]).
+ok
+
+10> lucene:match(@"location.near:0.0,1.0,100"@, 3).
+{[[{index,0},
+   {location,{geo,-8.381903171539307e-8,1.5000000782310963}},
+   {'`score',-17.292743682861328}],
+  [{index,-1},
+   {location,{geo,-0.5000000540167093,0.500000137835741}},
+   {'`score',-24.45547866821289}]],
+ [{total_hits,2},
+  {first_hit,1},
+  {query_time,1984},
+  {search_time,1021}]}
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockl{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+11> lucene:match(
+      @"index.erlang:\"lists:map:[fun(X) -> X*1.0 end]\""@, 3).
+{[[{index,10},
+   {location,{geo,4.999999953433871,11.500000152736902}},
+   {'`score',5.0}],
+  [{index,9},
+   {location,{geo,4.499999983236194,10.49999987706542}},
+   {'`score',4.499999523162842}],
+  [{index,8},
+   {location,{geo,4.000000013038516,9.499999936670065}},
+   {'`score',3.999999761581421}]],
+ [{total_hits,21},
+  {first_hit,1},
+  {query_time,2256},
+  {search_time,1240},
+  {next_page,<<172,237,0,5,115,114,0,36,99,111,109,46,
+               116,105,103,101,114,116,101,120,...>>}]}
+\end{lstlisting}
+}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[plain]{}{}
 \only<+>{\codeblocka}
@@ -317,6 +360,8 @@ do_call(Process, Label, Request, Timeout) ->
 \only<+>{\codeblockh}
 \only<+>{\codeblocki}
 \only<+>{\codeblockj}
+\only<+>{\codeblockk}
+\only<+>{\codeblockl}
 \end{frame}
 
 \end{document}
