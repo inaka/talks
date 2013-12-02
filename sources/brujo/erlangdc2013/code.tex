@@ -272,6 +272,87 @@ protected OtpErlangObject handleCall(OtpErlangObject cmd,
 \end{lstlisting}
 }
 
+\defverbatim[colored]\codeblockm{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+public LuceneServer(OtpNode host, int allowedThreads)
+    throws CorruptIndexException, LockObtainFailedException,
+            IOException {
+  super(host, "lucene_server");
+...
+  Extensions ext = @new Extensions('.')@;
+  ext.add("near", new NearParserExtension());
+  ext.add("erlang", new ErlangParserExtension(this.translator));
+  this.extensions = ext;
+...
+}
+
+private QueryParser queryParser() {
+  return new LuceneQueryParser(Version.LUCENE_36, this.analyzer,
+      this.translator, @this.extensions@);
+}
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockn{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+public Query parse(ExtensionQuery extQuery)
+  throws ParseException {
+  String key = extQuery.getField();
+  String[] modFun = @extQuery.getRawQueryString()@.split(":");
+  if (modFun.length < 2) {
+    throw new ParseException(
+        "erlang queries expect values in <mod>:<fun> or
+         <mod>:<fun>:<args> format");
+  } else {
+    String mod = modFun[0], fun = modFun[1], args;
+    if (modFun.length == 2) {
+      args = "[]";
+    } else if (modFun.length == 3) {
+      args = modFun[2];
+    } else {
+...
+    }
+    ErlangFilter filter = @new ErlangFilter(mod, fun, args, key,@
+        @this.translator.getFieldType(key));@
+    ValueSource valSrc = new ErlangValueSource(filter);
+    return new CustomScoreQuery(new ConstantScoreQuery(filter),
+        new ValueSourceQuery(valSrc));
+  }
+}
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblocko{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+public DocIdSet getDocIdSet(IndexReader reader)
+  throws IOException {
+  final int docBase = this.nextDocBase;
+  this.nextDocBase += reader.maxDoc();
+  final OtpErlangObject[] docValues;
+...
+  final FixedBitSet bits = new FixedBitSet(reader.maxDoc());
+  OtpErlangTuple call =
+    new OtpErlangTuple(new OtpErlangObject[] {
+      this.mod,this.fun,this.arg, new OtpErlangList(docValues)});
+...
+  OtpErlangObject response = OtpGenServer.call(LuceneNode.NODE,
+      "lucene", LuceneNode.PEER, call);
+...
+  OtpErlangList results = (OtpErlangList) response;
+  for (int docid = 0; docid < docValues.length; docid++) {
+    OtpErlangObject result = results.elementAt(docid);
+    if (result instanceof OtpErlangDouble) {
+      scores.put(docid + docBase,
+          ((OtpErlangDouble) result).doubleValue());
+      bits.set(docid);
+    } else {
+      bits.clear(docid);
+    }
+...
+}
+\end{lstlisting}
+}
+
 \lstset{% general command to set parameter(s)
 		mathescape=true,
 		language=erlang,
@@ -348,6 +429,25 @@ ok
 \end{lstlisting}
 }
 
+\defverbatim[colored]\codeblockp{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+Reply =
+  try
+    {ok, Scanned, _} = erl_scan:string(Args++"."),
+    {ok, Parsed} = erl_parse:parse_exprs(Scanned),
+    {value, Arguments, _} = erl_eval:exprs(Parsed, []),
+    erlang:apply(
+      Mod,Fun,
+      Arguments ++ [[parse_value(Value) || Value <- Values]])
+  catch
+    _:Error ->
+      {error, Error}
+  end,
+gen_server:reply(From, Reply)
+\end{lstlisting}
+}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[plain]{}{}
 \only<+>{\codeblocka}
@@ -362,6 +462,10 @@ ok
 \only<+>{\codeblockj}
 \only<+>{\codeblockk}
 \only<+>{\codeblockl}
+\only<+>{\codeblockm}
+\only<+>{\codeblockn}
+\only<+>{\codeblocko}
+\only<+>{\codeblockp}
 \end{frame}
 
 \end{document}
