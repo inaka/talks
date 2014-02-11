@@ -1,0 +1,36 @@
+
+We want to monitor the process registered as lucene_server on the Java node
+
+---
+
+First try…
+  If it were an Erlang node, we could've done…
+  1> erlang:monitor(process, {lucene_server, 'other_node@host.local'}).
+  #Ref<0.0.0.198606>
+
+  But on a Java node…
+  2> > erlang:monitor(process, {lucene_server, 'lucene_server_java@priscilla.local'}).
+** exception error: bad argument
+     in function  monitor/2
+        called as monitor(process,
+                          {lucene_server,'lucene_server_java@priscilla.local'})
+
+---
+
+So, no monitor, let's link!
+  link/1 can't use a process name, it needs a pid.
+  If it were an Erlang node, we could've done…
+  1> link(rpc:call('other_node@host.local', erlang, whereis, [lucene_server])).
+  true
+
+  But on a Java node…
+  1> link(rpc:call('lucene_server_java@priscilla.local', erlang, whereis, [lucene_server])).
+
+  …rpc doesn't work against Java nodes and there is no erlang module there.
+
+---
+
+So, since lucene_server is an OtpGenServer, the solution is:
+
+  1> link(gen_server:call({lucene_server, 'lucene_server_java@priscilla.local'}, {pid})).
+  true

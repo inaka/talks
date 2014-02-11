@@ -447,6 +447,47 @@ gen_server:reply(From, Reply)
 \end{lstlisting}
 }
 
+\defverbatim[colored]\codeblockq{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+1> erlang:monitor(
+	process, {lucene_server, 'other_node@host.local'}).
+#Ref<0.0.0.210>
+2> erlang:monitor(
+	process,
+	{lucene_server, 'lucene_server_java@host.local'}).
+** exception error: bad argument
+     in function  monitor/2
+        called as monitor(
+           process,
+           {lucene_server,'lucene_server_java@host.local'})
+     in call from erlang:dmonitor_p/2
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblockr{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+1> Pid = rpc:call(
+    'other_node@host.local', erlang, whereis, [lucene_server]).
+<10086.75.0>
+2> link(Pid).
+true
+3> Pid2 = rpc:call(
+    'lucene_server_java@priscilla.local', erlang,
+    whereis, [lucene_server], 5000).
+{badrpc,timeout}
+\end{lstlisting}
+}
+
+\defverbatim[colored]\codeblocks{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+1> Pid = gen_server:call(
+	{lucene_server, 'lucene_server_java@priscilla.local'},
+	{pid}).
+<10087.1.0>
+2> link(Pid).
+true
+\end{lstlisting}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[plain]{}{}
@@ -466,6 +507,9 @@ gen_server:reply(From, Reply)
 \only<+>{\codeblockn}
 \only<+>{\codeblocko}
 \only<+>{\codeblockp}
+\only<+>{\codeblockq}
+\only<+>{\codeblockr}
+\only<+>{\codeblocks}
 \end{frame}
 
 \end{document}
