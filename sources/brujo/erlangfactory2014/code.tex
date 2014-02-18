@@ -489,6 +489,74 @@ true
 \end{lstlisting}
 }
 
+\defverbatim[colored]\codeblockt{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+-spec tick(binary()) -> proplists:proplist().
+tick(Data) ->
+  TS1 = ts(),
+  @?JAVA_SERVER ! {tick, self(), Data, TS1, TS1},@
+  receive
+    {tick, _Pid, Data, TS1, TS2} ->
+      TS3 = ts(),
+      [ {'erl->java', TS2 - TS1}
+      , {'java->erl', TS3 - TS2}
+      , @{'total',     TS3 - TS1}@
+      , {'size',      byte_size(term_to_binary(Data))}]
+  after 30000 ->
+    throw(timeout)
+  end.
+
+ts() ->
+  {X, Y, Z} = os:timestamp(),
+  X * 1000000000 + Y * 1000 + trunc(Z / 1000).
+\end{lstlisting}
+}
+
+\lstset{% general command to set parameter(s)
+		mathescape=true,
+		language=java,
+		basicstyle=\ttfamily\large,
+		keywordstyle=\color{blue}\bfseries,
+		identifierstyle=\color{darkblue},
+		stringstyle=\ttfamily,
+		moredelim=**[is][{\btHL[fill=green!30,draw=red,dashed,thin]}]{@}{@},
+		showstringspaces=false}
+
+\defverbatim[colored]\codeblocku{%
+\begin{lstlisting}[basicstyle=\ttfamily\scriptsize]
+  /** This runs inside a never-ending loop */
+  protected static boolean processMsg(
+    OtpErlangObject msg, OtpMbox mbox)
+      throws OtpErlangDecodeException {
+    if (msg instanceof OtpErlangTuple) {
+      OtpErlangTuple cmd = (OtpErlangTuple) msg;
+      OtpErlangAtom cmdName = (OtpErlangAtom) cmd.elementAt(0);
+      OtpErlangPid caller = (OtpErlangPid) cmd.elementAt(1);
+      if (cmdName.atomValue().equals("tick")) {
+        OtpErlangObject result =
+          new OtpErlangTuple(new OtpErlangObject[] { cmdName,
+            mbox.self(), @cmd.elementAt(2)@, cmd.elementAt(3),
+            @new OtpErlangLong(System.currentTimeMillis())@ });
+        mbox.send(caller, result);
+      }
+      return true;
+    }
+    throw new OtpErlangDecodeException("Bad message");
+  }
+\end{lstlisting}
+}
+
+
+\lstset{% general command to set parameter(s)
+		mathescape=true,
+		language=erlang,
+		basicstyle=\ttfamily\large,
+		keywordstyle=\color{blue}\bfseries,
+		identifierstyle=\color{darkblue},
+		stringstyle=\ttfamily,
+		moredelim=**[is][{\btHL[fill=green!30,draw=red,dashed,thin]}]{@}{@},
+		showstringspaces=false}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}[plain]{}{}
 \only<+>{\codeblocka}
@@ -510,6 +578,8 @@ true
 \only<+>{\codeblockq}
 \only<+>{\codeblockr}
 \only<+>{\codeblocks}
+\only<+>{\codeblockt}
+\only<+>{\codeblocku}
 \end{frame}
 
 \end{document}
