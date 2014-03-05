@@ -582,4 +582,19 @@ ts() ->
 \only<+>{\codeblocku}
 \end{frame}
 
+\begin{frame}[plain]{}{}
+\begin{table}[htdp]
+\begin{tabular}{|c|c|c|}
+\hline
+\textbf{Erlang} & \textbf{Length} & \textbf{Java} \\
+\hline
+\texttt{""} & $0$ & \texttt{OtpErlangList} \\
+\texttt{"a string"} & $8$ & \texttt{OtpErlangString} \\
+\texttt{"a long string \dots"} & $> 65535$ & \texttt{OtpErlangList} \\
+\hline
+\end{tabular}
+\label{default}
+\end{table}%
+
+\end{frame}
 \end{document}
