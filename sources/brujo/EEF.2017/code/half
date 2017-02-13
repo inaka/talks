@@ -1,0 +1,13 @@
+#!/usr/local/bin/escript
+
+main([Input| _]) ->
+  ParsedInput =
+    case string:to_float(Input) of
+      {error, no_float} ->
+        case string:to_integer(Input) of
+          {error, no_integer} -> Input;
+          {Int, _Rest} -> Int
+        end;
+      {Float, _Rest} -> Float
+    end,
+  io:format("~p", [dumb_math:half(ParsedInput)]).
