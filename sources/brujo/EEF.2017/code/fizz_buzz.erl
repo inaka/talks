@@ -1,11 +1,23 @@
--module fizz_buzz.
+-module(fizz_buzz).
 
 -export [up_to/1].
+-export [init/1].
 
-up_to(Number) when is_number(Number) ->
-  up_to(1, Number);
-up_to(NotNumber) ->
-  io:format("Not a number: ~p~n", [NotNumber]), error.
+up_to(Number) ->
+  try gen_server:start(?MODULE, Number, []) of
+    {ok, _Pid} -> ok;
+    {error, not_number} ->
+      io:format("Not a number ~p~n", [Number])
+  catch
+    _:Exception ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+  end.
+
+init(Number) when is_number(Number) ->
+  up_to(1, Number),
+  {ok, Number};
+init(_NotNumber) ->
+  {stop, not_number}.
 
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),

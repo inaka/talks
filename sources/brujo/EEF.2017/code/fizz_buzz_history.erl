@@ -214,8 +214,135 @@ up_to(I, Top) when Top < I ->
   io:format("~n").
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% ...we're still just half-way through
+%% ...but to be a real erlanger I must use OTP, right?
+%% let's use a gen_server here!
+%% CHECK THE DOCS… etc… etc…
+%% init is wrong… we'll fix that in the future
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-module fizz_buzz.
+
+-export [up_to/1].
+-export [init/1].
+
+up_to(Number) ->
+  case gen_server:start_link(?MODULE, Number, []) of
+    {ok, _Pid} -> ok;
+    {error, not_number} ->
+      io:format("Not a number ~p~n", [Number])
+  end.
+
+init(Number) when is_number(Number) ->
+  up_to(1, Number),
+  {ok, Number};
+init(_NotNumber) ->
+  {stop, not_number}.
+
+up_to(I, Top) when Top >= I ->
+  I rem 3 == 0 andalso io:format("fizz"),
+  [io:format("buzz") || I rem 5 == 0],
+  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  io:format(" "),
+  up_to(I + 1, Top);
+up_to(I, Top) when Top < I ->
+  io:format("~n").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% you see? that's why I hate macros :P
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-module(fizz_buzz).
+
+-export [up_to/1].
+-export [init/1].
+
+up_to(Number) ->
+  case gen_server:start_link(?MODULE, Number, []) of
+    {ok, _Pid} -> ok;
+    {error, not_number} ->
+      io:format("Not a number ~p~n", [Number])
+  end.
+
+init(Number) when is_number(Number) ->
+  up_to(1, Number),
+  {ok, Number};
+init(_NotNumber) ->
+  {stop, not_number}.
+
+up_to(I, Top) when Top >= I ->
+  I rem 3 == 0 andalso io:format("fizz"),
+  [io:format("buzz") || I rem 5 == 0],
+  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  io:format(" "),
+  up_to(I + 1, Top);
+up_to(I, Top) when Top < I ->
+  io:format("~n").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Now it works for numbers… but what about the errors?
+%% That was an exception, ok... let's try to catch it...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-module(fizz_buzz).
+
+-export [up_to/1].
+-export [init/1].
+
+up_to(Number) ->
+  try gen_server:start_link(?MODULE, Number, []) of
+    {ok, _Pid} -> ok;
+    {error, not_number} ->
+      io:format("Not a number ~p~n", [Number])
+  catch
+    _:Exception ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+  end.
+
+init(Number) when is_number(Number) ->
+  up_to(1, Number),
+  {ok, Number};
+init(_NotNumber) ->
+  {stop, not_number}.
+
+up_to(I, Top) when Top >= I ->
+  I rem 3 == 0 andalso io:format("fizz"),
+  [io:format("buzz") || I rem 5 == 0],
+  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  io:format(" "),
+  up_to(I + 1, Top);
+up_to(I, Top) when Top < I ->
+  io:format("~n").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% No luck! (try stuff on the console... still no luck)
+%% Turns out, I needed to start the server not link it!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-module(fizz_buzz).
+
+-export [up_to/1].
+-export [init/1].
+
+up_to(Number) ->
+  try gen_server:start(?MODULE, Number, []) of
+    {ok, _Pid} -> ok;
+    {error, not_number} ->
+      io:format("Not a number ~p~n", [Number])
+  catch
+    _:Exception ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+  end.
+
+init(Number) when is_number(Number) ->
+  up_to(1, Number),
+  {ok, Number};
+init(_NotNumber) ->
+  {stop, not_number}.
+
+up_to(I, Top) when Top >= I ->
+  I rem 3 == 0 andalso io:format("fizz"),
+  [io:format("buzz") || I rem 5 == 0],
+  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  io:format(" "),
+  up_to(I + 1, Top);
+up_to(I, Top) when Top < I ->
+  io:format("~n").
 
 
 -endif.
