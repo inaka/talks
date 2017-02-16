@@ -1,6 +1,9 @@
 #!/usr/local/bin/escript
 
+main([]) ->
+  io:format("Usage ./fizz_buzz [number]");
 main([Input| _]) ->
+  {ok, _} = fizz_buzz:start(),
   ParsedInput =
     case string:to_float(Input) of
       {error, no_float} ->
@@ -10,4 +13,4 @@ main([Input| _]) ->
         end;
       {Float, _Rest} -> Float
     end,
-  io:format("~p", [dumb_math:half(ParsedInput)]).
+  fizz_buzz:up_to(ParsedInput).

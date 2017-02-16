@@ -344,5 +344,163 @@ up_to(I, Top) when Top >= I ->
 up_to(I, Top) when Top < I ->
   io:format("~n").
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% OK, OK, I hear you people... that's not how gen_servers work.
+%% Let's make it right!
+%% ...quick note here on noargs...
+%% and I move all the logic to handle_call
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-module(fizz_buzz).
+
+-export [start/0, up_to/1].
+-export [init/1, handle_call/3].
+
+start() ->
+  gen_server:start({local, ?MODULE}, ?MODULE, noargs, []).
+
+up_to(Number) ->
+  try gen_server:call(?MODULE, {up_to, Number}) of
+    ok -> ok;
+    {error, not_number} ->
+      io:format("Not a number ~p~n", [Number])
+  catch
+    _:Exception ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+  end.
+
+init(noargs) -> {ok, nostate}.
+
+handle_call({up_to, Number}, _From, State) ->
+  not is_number(Number) andalso
+    throw({error, not_number}),
+
+  Response = up_to(1, Number),
+  {reply, Response, State}.
+
+up_to(I, Top) when Top >= I ->
+  I rem 3 == 0 andalso io:format("fizz"),
+  [io:format("buzz") || I rem 5 == 0],
+  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  io:format(" "),
+  up_to(I + 1, Top);
+up_to(I, Top) when Top < I ->
+  io:format("~n").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Yeah, sure... we can't just use trhow for assertions on handle_call...
+%% ...or can we?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-module(fizz_buzz).
+
+-export [start/0, up_to/1].
+-export [init/1, handle_call/3].
+
+start() ->
+  gen_server:start({local, ?MODULE}, ?MODULE, noargs, []).
+
+up_to(Number) ->
+  try gen_server:call(?MODULE, {up_to, Number}) of
+    ok -> ok;
+    {error, not_number} ->
+      io:format("Not a number ~p~n", [Number])
+  catch
+    _:Exception ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+  end.
+
+init(noargs) -> {ok, nostate}.
+
+handle_call({up_to, Number}, _From, State) ->
+  not is_number(Number) andalso
+    throw({reply, {error, not_number}, State}),
+
+  Response = up_to(1, Number),
+  {reply, Response, State}.
+
+up_to(I, Top) when Top >= I ->
+  I rem 3 == 0 andalso io:format("fizz"),
+  [io:format("buzz") || I rem 5 == 0],
+  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  io:format(" "),
+  up_to(I + 1, Top);
+up_to(I, Top) when Top < I ->
+  io:format("~n").
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% TADA!!!
+%% Now, the final step, let's turn it into a script
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#!/usr/local/bin/escript
+
+main([]) ->
+  io:format("Usage ./fizz_buzz [number]");
+main([Input| _]) ->
+  {ok, _} = fizz_buzz:start(),
+  fizz_buzz:up_to(Input).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Oh, right! We have to parse the input!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#!/usr/local/bin/escript
+
+main([]) ->
+  io:format("Usage ./fizz_buzz [number]");
+main([Input| _]) ->
+  {ok, _} = fizz_buzz:start(),
+  fizz_buzz:up_to(list_to_integer(Input)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% But if I try with something that's not a number... boom!
+%% list_to_integer throws an exception, let's use string:to_integer, insetead!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#!/usr/local/bin/escript
+
+main([]) ->
+  io:format("Usage ./fizz_buzz [number]");
+main([Input| _]) ->
+  {ok, _} = fizz_buzz:start(),
+  ParsedInput =
+    case string:to_integer(Input) of
+      {error, no_integer} -> Input;
+      {Int, _Rest} -> Int
+    end,
+  fizz_buzz:up_to(ParsedInput).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Yeah, but... our fizzbuzz script should work with floats, too...
+%% Piece of cake, right?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#!/usr/local/bin/escript
+
+main([]) ->
+  io:format("Usage ./fizz_buzz [number]");
+main([Input| _]) ->
+  {ok, _} = fizz_buzz:start(),
+  ParsedInput =
+    case string:to_float(Input) of
+      {error, no_float} -> Input;
+      {Float, _Rest} -> Float
+    end,
+  fizz_buzz:up_to(ParsedInput).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% 100 not a number? REALLY?
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#!/usr/local/bin/escript
+
+main([]) ->
+  io:format("Usage ./fizz_buzz [number]");
+main([Input| _]) ->
+  {ok, _} = fizz_buzz:start(),
+  ParsedInput =
+    case string:to_float(Input) of
+      {error, no_float} ->
+        case string:to_integer(Input) of
+          {error, no_integer} -> Input;
+          {Int, _Rest} -> Int
+        end;
+      {Float, _Rest} -> Float
+    end,
+  fizz_buzz:up_to(ParsedInput).
 
 -endif.

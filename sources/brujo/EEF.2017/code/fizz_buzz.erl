@@ -1,11 +1,14 @@
 -module(fizz_buzz).
 
--export [up_to/1].
--export [init/1].
+-export [start/0, up_to/1].
+-export [init/1, handle_call/3].
+
+start() ->
+  gen_server:start({local, ?MODULE}, ?MODULE, noargs, []).
 
 up_to(Number) ->
-  try gen_server:start(?MODULE, Number, []) of
-    {ok, _Pid} -> ok;
+  try gen_server:call(?MODULE, {up_to, Number}) of
+    ok -> ok;
     {error, not_number} ->
       io:format("Not a number ~p~n", [Number])
   catch
@@ -13,11 +16,14 @@ up_to(Number) ->
       io:format("Couldn't process ~p: ~p~n", [Number, Exception])
   end.
 
-init(Number) when is_number(Number) ->
-  up_to(1, Number),
-  {ok, Number};
-init(_NotNumber) ->
-  {stop, not_number}.
+init(noargs) -> {ok, nostate}.
+
+handle_call({up_to, Number}, _From, State) ->
+  not is_number(Number) andalso
+    throw({reply, {error, not_number}, State}),
+
+  Response = up_to(1, Number),
+  {reply, Response, State}.
 
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
