@@ -1,0 +1,582 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="content-type" content="text/html; charset=None">
+  <style type="text/css">
+td.linenos { background-color: #f0f0f0; padding-right: 10px; }
+span.lineno { background-color: #f0f0f0; padding: 0 5px 0 5px; }
+pre { line-height: 125%; }
+body .hll { background-color: #ffffcc }
+body  { background: #ffffff; }
+body .c { color: #008800; font-style: italic } /* Comment */
+body .err { color: #a61717; background-color: #e3d2d2 } /* Error */
+body .k { color: #000080; font-weight: bold } /* Keyword */
+body .ch { color: #008800; font-style: italic } /* Comment.Hashbang */
+body .cm { color: #008800; font-style: italic } /* Comment.Multiline */
+body .cp { color: #008080 } /* Comment.Preproc */
+body .c1 { color: #008800; font-style: italic } /* Comment.Single */
+body .cs { color: #008800; font-weight: bold } /* Comment.Special */
+body .gd { color: #000000; background-color: #ffdddd } /* Generic.Deleted */
+body .ge { font-style: italic } /* Generic.Emph */
+body .gr { color: #aa0000 } /* Generic.Error */
+body .gh { color: #999999 } /* Generic.Heading */
+body .gi { color: #000000; background-color: #ddffdd } /* Generic.Inserted */
+body .go { color: #888888 } /* Generic.Output */
+body .gp { color: #555555 } /* Generic.Prompt */
+body .gs { font-weight: bold } /* Generic.Strong */
+body .gu { color: #aaaaaa } /* Generic.Subheading */
+body .gt { color: #aa0000 } /* Generic.Traceback */
+body .kc { color: #000080; font-weight: bold } /* Keyword.Constant */
+body .kd { color: #000080; font-weight: bold } /* Keyword.Declaration */
+body .kn { color: #000080; font-weight: bold } /* Keyword.Namespace */
+body .kp { color: #000080; font-weight: bold } /* Keyword.Pseudo */
+body .kr { color: #000080; font-weight: bold } /* Keyword.Reserved */
+body .kt { color: #000080; font-weight: bold } /* Keyword.Type */
+body .m { color: #0000FF } /* Literal.Number */
+body .s { color: #0000FF } /* Literal.String */
+body .na { color: #FF0000 } /* Name.Attribute */
+body .nt { color: #000080; font-weight: bold } /* Name.Tag */
+body .ow { font-weight: bold } /* Operator.Word */
+body .w { color: #bbbbbb } /* Text.Whitespace */
+body .mb { color: #0000FF } /* Literal.Number.Bin */
+body .mf { color: #0000FF } /* Literal.Number.Float */
+body .mh { color: #0000FF } /* Literal.Number.Hex */
+body .mi { color: #0000FF } /* Literal.Number.Integer */
+body .mo { color: #0000FF } /* Literal.Number.Oct */
+body .sb { color: #0000FF } /* Literal.String.Backtick */
+body .sc { color: #800080 } /* Literal.String.Char */
+body .sd { color: #0000FF } /* Literal.String.Doc */
+body .s2 { color: #0000FF } /* Literal.String.Double */
+body .se { color: #0000FF } /* Literal.String.Escape */
+body .sh { color: #0000FF } /* Literal.String.Heredoc */
+body .si { color: #0000FF } /* Literal.String.Interpol */
+body .sx { color: #0000FF } /* Literal.String.Other */
+body .sr { color: #0000FF } /* Literal.String.Regex */
+body .s1 { color: #0000FF } /* Literal.String.Single */
+body .ss { color: #0000FF } /* Literal.String.Symbol */
+body .il { color: #0000FF } /* Literal.Number.Integer.Long */
+
+  </style>
+</head>
+<body>
+<h2></h2>
+
+<div class="highlight" style="background: #ffffff"><pre style="line-height: 125%">-module(fizz_buzz_history).
+
+-ifdef(nothing).
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Look, ma! No parentheses!!</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Let&#39;s start with an easy task: let&#39;s just print all numbers!</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number).
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~p &quot;</span>, [I]),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Before moving on, let&#39;s deal with some edge cases. Let&#39;s leave non-numbers</span>
+<span style="color: #008800; font-style: italic">%% out fo this...</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number).
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> is_number(Top) <span style="font-weight: bold">and</span> Top &gt;= I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~p &quot;</span>, [I]),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> is_number(Top) <span style="font-weight: bold">and</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>);
+up_to(_, Top) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [Top]), error.
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% WAT?! 10 is not a number?</span>
+<span style="color: #008800; font-style: italic">%% ...anybody can tell me what&#39;s going on here?</span>
+<span style="color: #008800; font-style: italic">%% Yeah, we need our very old friend: andalso!</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number).
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> is_number(Top) <span style="font-weight: bold">andalso</span> Top &gt;= I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~p &quot;</span>, [I]),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> is_number(Top) <span style="font-weight: bold">andalso</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>);
+up_to(_, Top) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [Top]), error.
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Actually, let&#39;s move it to the exported function to reduce complexity...</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number);
+up_to(NotNumber) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [NotNumber]), error.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~p &quot;</span>, [I]),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Now let&#39;s add the fizz buzzing...</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number);
+up_to(NotNumber) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [NotNumber]), error.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> -&gt;
+    io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>)
+  <span style="color: #000080; font-weight: bold">end</span>,
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span> -&gt;
+    io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>)
+  <span style="color: #000080; font-weight: bold">end</span>,
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span> -&gt;
+    io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I])
+  <span style="color: #000080; font-weight: bold">end</span>,
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% There you go, some might say I&#39;m a little _imperative_, but it should work, right?</span>
+<span style="color: #008800; font-style: italic">%% NO</span>
+<span style="color: #008800; font-style: italic">%% no true branch... let&#39;s add those... ROK-style!</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number);
+up_to(NotNumber) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [NotNumber]), error.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> -&gt;
+      io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>)
+   ; true -&gt; move_on
+  <span style="color: #000080; font-weight: bold">end</span>,
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span> -&gt;
+      io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>)
+   ; true -&gt; nothing_to_do_here
+  <span style="color: #000080; font-weight: bold">end</span>,
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span> -&gt;
+      io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I])
+   ; true -&gt; watcha_looking_at
+  <span style="color: #000080; font-weight: bold">end</span>,
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% It works, but those true branches are awful, luckily somebody came up with a</span>
+<span style="color: #008800; font-style: italic">%% great idea on how to remove them. Actually 2 ideas (mindblown).</span>
+<span style="color: #008800; font-style: italic">%% For the first one... let&#39;s remember how andalso works... etc etc</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number);
+up_to(NotNumber) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [NotNumber]), error.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span> -&gt;
+      io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>)
+   ; true -&gt; nothing_to_do_here
+  <span style="color: #000080; font-weight: bold">end</span>,
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span> -&gt;
+      io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I])
+   ; true -&gt; watcha_looking_at
+  <span style="color: #000080; font-weight: bold">end</span>,
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% I hate that one... it&#39;s super ugly. There is another one using list</span>
+<span style="color: #008800; font-style: italic">%% comprehensions... my 2nd-favourite Erlang structure (behind Bin Comps)</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number);
+up_to(NotNumber) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [NotNumber]), error.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  <span style="color: #000080; font-weight: bold">if</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span> -&gt;
+      io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I])
+   ; true -&gt; watcha_looking_at
+  <span style="color: #000080; font-weight: bold">end</span>,
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% You can even combine both...</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+
+up_to(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number);
+up_to(NotNumber) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Not a number: ~p~n&quot;</span>, [NotNumber]), error.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span>
+    [io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I]) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span>],
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% ...but to be a real erlanger I must use OTP, right?</span>
+<span style="color: #008800; font-style: italic">%% let&#39;s use a gen_server here!</span>
+<span style="color: #008800; font-style: italic">%% CHECK THE DOCS… etc… etc…</span>
+<span style="color: #008800; font-style: italic">%% init is wrong… we&#39;ll fix that in the future</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module fizz_buzz.
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+-export [init/<span style="color: #0000FF">1</span>].
+
+up_to(Number) -&gt;
+  <span style="color: #000080; font-weight: bold">case</span> gen_server:start_link(?MODULE, Number, []) <span style="color: #000080; font-weight: bold">of</span>
+    {ok, _Pid} -&gt; ok;
+    {error, not_number} -&gt;
+      io:format(<span style="color: #0000FF">&quot;Not a number ~p~n&quot;</span>, [Number])
+  <span style="color: #000080; font-weight: bold">end</span>.
+
+init(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number),
+  {ok, Number};
+init(_NotNumber) -&gt;
+  {stop, not_number}.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span>
+    [io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I]) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span>],
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% you see? that&#39;s why I hate macros :P</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module(fizz_buzz).
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+-export [init/<span style="color: #0000FF">1</span>].
+
+up_to(Number) -&gt;
+  <span style="color: #000080; font-weight: bold">case</span> gen_server:start_link(?MODULE, Number, []) <span style="color: #000080; font-weight: bold">of</span>
+    {ok, _Pid} -&gt; ok;
+    {error, not_number} -&gt;
+      io:format(<span style="color: #0000FF">&quot;Not a number ~p~n&quot;</span>, [Number])
+  <span style="color: #000080; font-weight: bold">end</span>.
+
+init(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number),
+  {ok, Number};
+init(_NotNumber) -&gt;
+  {stop, not_number}.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span>
+    [io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I]) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span>],
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Now it works for numbers… but what about the errors?</span>
+<span style="color: #008800; font-style: italic">%% That was an exception, ok... let&#39;s try to catch it...</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module(fizz_buzz).
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+-export [init/<span style="color: #0000FF">1</span>].
+
+up_to(Number) -&gt;
+  <span style="color: #000080; font-weight: bold">try</span> gen_server:start_link(?MODULE, Number, []) <span style="color: #000080; font-weight: bold">of</span>
+    {ok, _Pid} -&gt; ok;
+    {error, not_number} -&gt;
+      io:format(<span style="color: #0000FF">&quot;Not a number ~p~n&quot;</span>, [Number])
+  <span style="color: #000080; font-weight: bold">catch</span>
+    _:Ex -&gt;
+      io:format(<span style="color: #0000FF">&quot;Couldn&#39;t process ~p: ~p~n&quot;</span>, [Number, Ex])
+  <span style="color: #000080; font-weight: bold">end</span>.
+
+init(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number),
+  {ok, Number};
+init(_NotNumber) -&gt;
+  {stop, not_number}.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span>
+    [io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I]) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span>],
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% No luck! (try stuff on the console... still no luck)</span>
+<span style="color: #008800; font-style: italic">%% Turns out, I needed to start the server not link it!</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module(fizz_buzz).
+
+-export [up_to/<span style="color: #0000FF">1</span>].
+-export [init/<span style="color: #0000FF">1</span>].
+
+up_to(Number) -&gt;
+  <span style="color: #000080; font-weight: bold">try</span> gen_server:start(?MODULE, Number, []) <span style="color: #000080; font-weight: bold">of</span>
+    {ok, _Pid} -&gt; ok;
+    {error, not_number} -&gt;
+      io:format(<span style="color: #0000FF">&quot;Not a number ~p~n&quot;</span>, [Number])
+  <span style="color: #000080; font-weight: bold">catch</span>
+    _:Ex -&gt;
+      io:format(<span style="color: #0000FF">&quot;Couldn&#39;t process ~p: ~p~n&quot;</span>, [Number, Ex])
+  <span style="color: #000080; font-weight: bold">end</span>.
+
+init(Number) <span style="color: #000080; font-weight: bold">when</span> is_number(Number) -&gt;
+  up_to(<span style="color: #0000FF">1</span>, Number),
+  {ok, Number};
+init(_NotNumber) -&gt;
+  {stop, not_number}.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span>
+    [io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I]) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span>],
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% OK, OK, I hear you people... that&#39;s not how gen_servers work.</span>
+<span style="color: #008800; font-style: italic">%% Let&#39;s make it right!</span>
+<span style="color: #008800; font-style: italic">%% ...quick note here on noargs...</span>
+<span style="color: #008800; font-style: italic">%% and I move all the logic to handle_call</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module(fizz_buzz).
+
+-export [start/<span style="color: #0000FF">0</span>, up_to/<span style="color: #0000FF">1</span>].
+-export [init/<span style="color: #0000FF">1</span>, handle_call/<span style="color: #0000FF">3</span>].
+
+start() -&gt;
+  gen_server:start({local, ?MODULE}, ?MODULE, noargs, []).
+
+up_to(Number) -&gt;
+  <span style="color: #000080; font-weight: bold">try</span> gen_server:call(?MODULE, {up_to, Number}) <span style="color: #000080; font-weight: bold">of</span>
+    ok -&gt; ok;
+    {error, not_number} -&gt;
+      io:format(<span style="color: #0000FF">&quot;Not a number ~p~n&quot;</span>, [Number])
+  <span style="color: #000080; font-weight: bold">catch</span>
+    _:Ex -&gt;
+      io:format(<span style="color: #0000FF">&quot;Couldn&#39;t process ~p: ~p~n&quot;</span>, [Number, Ex])
+  <span style="color: #000080; font-weight: bold">end</span>.
+
+init(noargs) -&gt; {ok, nostate}.
+
+handle_call({up_to, Number}, _From, State) -&gt;
+  <span style="font-weight: bold">not</span> is_number(Number) <span style="font-weight: bold">andalso</span>
+    throw({error, not_number}),
+
+  Response = up_to(<span style="color: #0000FF">1</span>, Number),
+  {reply, Response, State}.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span>
+    [io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I]) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span>],
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Yeah, sure... we can&#39;t just use trhow for assertions on handle_call...</span>
+<span style="color: #008800; font-style: italic">%% ...or can we?</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+-module(fizz_buzz).
+
+-export [start/<span style="color: #0000FF">0</span>, up_to/<span style="color: #0000FF">1</span>].
+-export [init/<span style="color: #0000FF">1</span>, handle_call/<span style="color: #0000FF">3</span>].
+
+start() -&gt;
+  gen_server:start({local, ?MODULE}, ?MODULE, noargs, []).
+
+up_to(Number) -&gt;
+  <span style="color: #000080; font-weight: bold">try</span> gen_server:call(?MODULE, {up_to, Number}) <span style="color: #000080; font-weight: bold">of</span>
+    ok -&gt; ok;
+    {error, not_number} -&gt;
+      io:format(<span style="color: #0000FF">&quot;Not a number ~p~n&quot;</span>, [Number])
+  <span style="color: #000080; font-weight: bold">catch</span>
+    _:Ex -&gt;
+      io:format(<span style="color: #0000FF">&quot;Couldn&#39;t process ~p: ~p~n&quot;</span>, [Number, Ex])
+  <span style="color: #000080; font-weight: bold">end</span>.
+
+init(noargs) -&gt; {ok, nostate}.
+
+handle_call({up_to, Number}, _From, State) -&gt;
+  <span style="font-weight: bold">not</span> is_number(Number) <span style="font-weight: bold">andalso</span>
+    throw({reply, {error, not_number}, State}),
+
+  Response = up_to(<span style="color: #0000FF">1</span>, Number),
+  {reply, Response, State}.
+
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &gt;= I -&gt;
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> == <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span> io:format(<span style="color: #0000FF">&quot;fizz&quot;</span>),
+  [io:format(<span style="color: #0000FF">&quot;buzz&quot;</span>) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> == <span style="color: #0000FF">0</span>],
+  I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">3</span> /= <span style="color: #0000FF">0</span> <span style="font-weight: bold">andalso</span>
+    [io:format(<span style="color: #0000FF">&quot;~p&quot;</span>, [I]) || I <span style="font-weight: bold">rem</span> <span style="color: #0000FF">5</span> /= <span style="color: #0000FF">0</span>],
+  io:format(<span style="color: #0000FF">&quot; &quot;</span>),
+  up_to(I + <span style="color: #0000FF">1</span>, Top);
+up_to(I, Top) <span style="color: #000080; font-weight: bold">when</span> Top &lt; I -&gt;
+  io:format(<span style="color: #0000FF">&quot;~n&quot;</span>).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% TADA!!!</span>
+<span style="color: #008800; font-style: italic">%% Now, the final step, let&#39;s turn it into a script</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #a61717; background-color: #e3d2d2">#</span>!/usr/local/bin/escript
+
+main([]) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Usage ./fizz_buzz [number]&quot;</span>);
+main([Input| _]) -&gt;
+  {ok, _} = fizz_buzz:start(),
+  fizz_buzz:up_to(Input).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Oh, right! We have to parse the input!</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #a61717; background-color: #e3d2d2">#</span>!/usr/local/bin/escript
+
+main([]) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Usage ./fizz_buzz [number]&quot;</span>);
+main([Input| _]) -&gt;
+  {ok, _} = fizz_buzz:start(),
+  fizz_buzz:up_to(list_to_integer(Input)).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% But if I try with something that&#39;s not a number... boom!</span>
+<span style="color: #008800; font-style: italic">%% list_to_integer throws an exception, let&#39;s use string:to_integer, insetead!</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #a61717; background-color: #e3d2d2">#</span>!/usr/local/bin/escript
+
+main([]) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Usage ./fizz_buzz [number]&quot;</span>);
+main([Input| _]) -&gt;
+  {ok, _} = fizz_buzz:start(),
+  ParsedInput =
+    <span style="color: #000080; font-weight: bold">case</span> string:to_integer(Input) <span style="color: #000080; font-weight: bold">of</span>
+      {error, no_integer} -&gt; Input;
+      {Int, _Rest} -&gt; Int
+    <span style="color: #000080; font-weight: bold">end</span>,
+  fizz_buzz:up_to(ParsedInput).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% Yeah, but... our fizzbuzz script should work with floats, too...</span>
+<span style="color: #008800; font-style: italic">%% Piece of cake, right?</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #a61717; background-color: #e3d2d2">#</span>!/usr/local/bin/escript
+
+main([]) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Usage ./fizz_buzz [number]&quot;</span>);
+main([Input| _]) -&gt;
+  {ok, _} = fizz_buzz:start(),
+  ParsedInput =
+    <span style="color: #000080; font-weight: bold">case</span> string:to_float(Input) <span style="color: #000080; font-weight: bold">of</span>
+      {error, no_float} -&gt; Input;
+      {Float, _Rest} -&gt; Float
+    <span style="color: #000080; font-weight: bold">end</span>,
+  fizz_buzz:up_to(ParsedInput).
+
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #008800; font-style: italic">%% 100 not a number? REALLY?</span>
+<span style="color: #008800; font-style: italic">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+<span style="color: #a61717; background-color: #e3d2d2">#</span>!/usr/local/bin/escript
+
+main([]) -&gt;
+  io:format(<span style="color: #0000FF">&quot;Usage ./fizz_buzz [number]&quot;</span>);
+main([Input| _]) -&gt;
+  {ok, _} = fizz_buzz:start(),
+  ParsedInput =
+    <span style="color: #000080; font-weight: bold">case</span> string:to_float(Input) <span style="color: #000080; font-weight: bold">of</span>
+      {error, no_float} -&gt;
+        <span style="color: #000080; font-weight: bold">case</span> string:to_integer(Input) <span style="color: #000080; font-weight: bold">of</span>
+          {error, no_integer} -&gt; Input;
+          {Int, _Rest} -&gt; Int
+        <span style="color: #000080; font-weight: bold">end</span>;
+      {Float, _Rest} -&gt; Float
+    <span style="color: #000080; font-weight: bold">end</span>,
+  fizz_buzz:up_to(ParsedInput).
+
+-endif.
+</pre></div>
+</body>
+</html>

@@ -207,7 +207,8 @@ up_to(NotNumber) ->
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
   [io:format("buzz") || I rem 5 == 0],
-  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  I rem 3 /= 0 andalso
+    [io:format("~p", [I]) || I rem 5 /= 0],
   io:format(" "),
   up_to(I + 1, Top);
 up_to(I, Top) when Top < I ->
@@ -240,7 +241,8 @@ init(_NotNumber) ->
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
   [io:format("buzz") || I rem 5 == 0],
-  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  I rem 3 /= 0 andalso
+    [io:format("~p", [I]) || I rem 5 /= 0],
   io:format(" "),
   up_to(I + 1, Top);
 up_to(I, Top) when Top < I ->
@@ -270,7 +272,8 @@ init(_NotNumber) ->
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
   [io:format("buzz") || I rem 5 == 0],
-  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  I rem 3 /= 0 andalso
+    [io:format("~p", [I]) || I rem 5 /= 0],
   io:format(" "),
   up_to(I + 1, Top);
 up_to(I, Top) when Top < I ->
@@ -291,8 +294,8 @@ up_to(Number) ->
     {error, not_number} ->
       io:format("Not a number ~p~n", [Number])
   catch
-    _:Exception ->
-      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+    _:Ex ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Ex])
   end.
 
 init(Number) when is_number(Number) ->
@@ -304,7 +307,8 @@ init(_NotNumber) ->
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
   [io:format("buzz") || I rem 5 == 0],
-  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  I rem 3 /= 0 andalso
+    [io:format("~p", [I]) || I rem 5 /= 0],
   io:format(" "),
   up_to(I + 1, Top);
 up_to(I, Top) when Top < I ->
@@ -325,8 +329,8 @@ up_to(Number) ->
     {error, not_number} ->
       io:format("Not a number ~p~n", [Number])
   catch
-    _:Exception ->
-      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+    _:Ex ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Ex])
   end.
 
 init(Number) when is_number(Number) ->
@@ -338,7 +342,8 @@ init(_NotNumber) ->
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
   [io:format("buzz") || I rem 5 == 0],
-  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  I rem 3 /= 0 andalso
+    [io:format("~p", [I]) || I rem 5 /= 0],
   io:format(" "),
   up_to(I + 1, Top);
 up_to(I, Top) when Top < I ->
@@ -364,8 +369,8 @@ up_to(Number) ->
     {error, not_number} ->
       io:format("Not a number ~p~n", [Number])
   catch
-    _:Exception ->
-      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+    _:Ex ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Ex])
   end.
 
 init(noargs) -> {ok, nostate}.
@@ -380,7 +385,8 @@ handle_call({up_to, Number}, _From, State) ->
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
   [io:format("buzz") || I rem 5 == 0],
-  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  I rem 3 /= 0 andalso
+    [io:format("~p", [I]) || I rem 5 /= 0],
   io:format(" "),
   up_to(I + 1, Top);
 up_to(I, Top) when Top < I ->
@@ -404,8 +410,8 @@ up_to(Number) ->
     {error, not_number} ->
       io:format("Not a number ~p~n", [Number])
   catch
-    _:Exception ->
-      io:format("Couldn't process ~p: ~p~n", [Number, Exception])
+    _:Ex ->
+      io:format("Couldn't process ~p: ~p~n", [Number, Ex])
   end.
 
 init(noargs) -> {ok, nostate}.
@@ -420,7 +426,8 @@ handle_call({up_to, Number}, _From, State) ->
 up_to(I, Top) when Top >= I ->
   I rem 3 == 0 andalso io:format("fizz"),
   [io:format("buzz") || I rem 5 == 0],
-  I rem 3 /= 0 andalso [io:format("~p", [I]) || I rem 5 /= 0],
+  I rem 3 /= 0 andalso
+    [io:format("~p", [I]) || I rem 5 /= 0],
   io:format(" "),
   up_to(I + 1, Top);
 up_to(I, Top) when Top < I ->
