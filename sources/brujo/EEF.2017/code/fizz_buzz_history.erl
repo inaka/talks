@@ -352,7 +352,7 @@ up_to(I, Top) when Top < I ->
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% OK, OK, I hear you people... that's not how gen_servers work.
 %% Let's make it right!
-%% ...quick note here on noargs...
+%% ...quick note here on nothing...
 %% and I move all the logic to handle_call
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 -module(fizz_buzz).
@@ -361,7 +361,7 @@ up_to(I, Top) when Top < I ->
 -export [init/1, handle_call/3].
 
 start() ->
-  gen_server:start({local, ?MODULE}, ?MODULE, noargs, []).
+  gen_server:start({local, ?MODULE}, ?MODULE, nothing, []).
 
 up_to(Number) ->
   try gen_server:call(?MODULE, {up_to, Number}) of
@@ -373,7 +373,7 @@ up_to(Number) ->
       io:format("Couldn't process ~p: ~p~n", [Number, Ex])
   end.
 
-init(noargs) -> {ok, nostate}.
+init(nothing) -> {ok, empty_state}.
 
 handle_call({up_to, Number}, _From, State) ->
   not is_number(Number) andalso
@@ -402,7 +402,7 @@ up_to(I, Top) when Top < I ->
 -export [init/1, handle_call/3].
 
 start() ->
-  gen_server:start({local, ?MODULE}, ?MODULE, noargs, []).
+  gen_server:start({local, ?MODULE}, ?MODULE, nothing, []).
 
 up_to(Number) ->
   try gen_server:call(?MODULE, {up_to, Number}) of
@@ -414,7 +414,7 @@ up_to(Number) ->
       io:format("Couldn't process ~p: ~p~n", [Number, Ex])
   end.
 
-init(noargs) -> {ok, nostate}.
+init(nothing) -> {ok, empty_state}.
 
 handle_call({up_to, Number}, _From, State) ->
   not is_number(Number) andalso

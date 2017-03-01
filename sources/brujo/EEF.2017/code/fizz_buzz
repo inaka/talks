@@ -5,12 +5,8 @@ main([]) ->
 main([Input| _]) ->
   {ok, _} = fizz_buzz:start(),
   ParsedInput =
-    case string:to_float(Input) of
-      {error, no_float} ->
-        case string:to_integer(Input) of
-          {error, no_integer} -> Input;
-          {Int, _Rest} -> Int
-        end;
-      {Float, _Rest} -> Float
+    case string:to_integer(Input) of
+      {Int, _} -> Int;
+      _ -> Input
     end,
   fizz_buzz:up_to(ParsedInput).
